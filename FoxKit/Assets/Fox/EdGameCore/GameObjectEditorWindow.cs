@@ -297,10 +297,7 @@ namespace Tpp.EdGameCore
 
         private void OnDisable()
         {
-            // Cleanup: Note that UnregisterValueChangedCallback requires the exact callback reference
-            // In this implementation, we use inline lambdas which makes unregistering difficult
-            // This is generally okay for EditorWindows as they are long-lived
-            // For production code, consider storing callback references if cleanup is critical
+            
         }
 
         private void AddLocatorPrefixEntry()

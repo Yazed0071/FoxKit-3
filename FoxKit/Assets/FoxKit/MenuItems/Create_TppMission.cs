@@ -4,18 +4,17 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-// Needed for reading Fox.EdCore.Vector3Field internals safely (no Linq)
 using DoubleField = Fox.EdCore.DoubleField;
 using FloatField = Fox.EdCore.FloatField;
 
 namespace FoxKit.MenuItems
 {
-    public class CreateMission : EditorWindow
+    public class TppMission : EditorWindow
     {
-        [MenuItem("FoxKit/Create/Mission")]
+        [MenuItem("FoxKit/Create/Tpp Mission")]
         public static void ShowWindow()
         {
-            var w = GetWindow<CreateMission>();
+            var w = GetWindow<TppMission>();
             w.titleContent = new GUIContent("Mission Creator");
             w.minSize = new Vector2(450f, 400f);
         }
@@ -770,6 +769,10 @@ namespace FoxKit.MenuItems
             sb.AppendLine("this.packs = function(missionCode)");
             foreach (var p in GetEnabledPackPaths())
                 sb.AppendLine("\tTppPackList.AddMissionPack(\"" + p + "\")");
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.AppendLine("\t--Mission's Core, must be last.");
             sb.AppendLine($"\tTppPackList.AddMissionPack(\"/Assets/tppmod/pack/mission2/custom_story/s{mc}/area_s{mc}.fpk\")");
             sb.AppendLine("end");
             sb.AppendLine();
