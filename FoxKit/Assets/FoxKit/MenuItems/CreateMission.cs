@@ -662,11 +662,30 @@ namespace FoxKit.MenuItems
         {
             CommitPendingEdits();
 
-            string lua = BuildLuaString();
-            string defaultName = "s" + (missionCode != null ? missionCode.value : MIN_MISSION_CODE) + "_mission.lua";
 
-            string path = EditorUtility.SaveFilePanel("Export Mission Lua", Application.dataPath, defaultName, "lua");
-            if (string.IsNullOrEmpty(path)) return;
+            string lua = BuildLuaString();
+
+
+            uint code = (missionCode != null) ? missionCode.value : MIN_MISSION_CODE;
+            string codeStr = code.ToString();
+
+
+            string fileName = $"s{codeStr}_mission.lua";
+
+            string outputDir = System.IO.Path.Combine(
+            Application.dataPath,
+            "Game", "Assets", "tppmod", "pack", "mission2", "custom_story",
+            $"s{codeStr}",
+            $"area_s{codeStr}_fpk",
+            "ExportedLua"
+            );
+
+
+            System.IO.Directory.CreateDirectory(outputDir);
+
+
+            string path = System.IO.Path.Combine(outputDir, fileName);
+
 
             System.IO.File.WriteAllText(path, lua);
             Debug.Log("Exported mission lua: " + path);
@@ -751,7 +770,7 @@ namespace FoxKit.MenuItems
             sb.AppendLine("this.packs = function(missionCode)");
             foreach (var p in GetEnabledPackPaths())
                 sb.AppendLine("\tTppPackList.AddMissionPack(\"" + p + "\")");
-            sb.AppendLine($"\tTppPackList.AddMissionPack(\"/Assets/tpp/pack/mission2/custom_story/s{mc}/area_s{mc}.fpk\")");
+            sb.AppendLine($"\tTppPackList.AddMissionPack(\"/Assets/tppmod/pack/mission2/custom_story/s{mc}/area_s{mc}.fpk\")");
             sb.AppendLine("end");
             sb.AppendLine();
             sb.AppendLine("return this");
