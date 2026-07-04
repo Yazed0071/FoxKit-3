@@ -1,8 +1,5 @@
-﻿using Fox.Fio;
-using Fox.GameService;
-using System;
+﻿using Fox.GameService;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,18 +14,8 @@ namespace FoxKit.MenuItems
             if (string.IsNullOrEmpty(assetPath))
                 return;
 
-            using var reader = new FileStreamReader(System.IO.File.OpenRead(assetPath));
-            var frtReader = new GsRouteSetReader();
-            UnityEngine.SceneManagement.Scene? scene;
-            try
-            {
-                scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
-            }
-            catch (InvalidOperationException)
-            {
-                scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            }
-            scene = frtReader.Read(reader);
+            var frtReader = new RouteFileReader();
+            UnityEngine.SceneManagement.Scene? scene = frtReader.Read(System.IO.File.ReadAllBytes(assetPath));
             if (scene is Scene realScene)
                 realScene.name = System.IO.Path.GetFileNameWithoutExtension(assetPath);
             else

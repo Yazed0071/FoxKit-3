@@ -2,6 +2,7 @@ using Fox.Fio;
 using Fox;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,20 +11,58 @@ namespace Fox.GameService
     [InitializeOnLoad]
     public static class GameServiceModule
     {
-        internal static Dictionary<StrCode32, Func<GameObject, uint[], GsRouteDataRouteEvent>> GsRouteDataEventDeserializationMap = new();
+        internal static Dictionary<StrCode32, Type> RouteEdgeEventMap = new();
+        internal static Dictionary<StrCode32, Type> RouteNodeEventMap = new();
 
         internal static StringId32Map RouteIdMap = null;
+        internal static StringId32Map EventIdMap = null;
 
-        public static void RegisterRouteDataEventDeserializationCallback(StrCode32 id, Func<GameObject, uint[], GsRouteDataRouteEvent> deserializeFunc)
+        public static void RegisterRouteEdgeEventType(StrCode32 id, Type type)
         {
-            Debug.Assert(deserializeFunc != null);
-
-            Debug.Assert(GsRouteDataEventDeserializationMap.TryAdd(id, deserializeFunc));
+            Debug.Assert(RouteEdgeEventMap.TryAdd(id, type));
         }
 
-        public static void RegisterRouteIdMap(string dictionaryPath)
+        public static void RegisterRouteNodeEventType(StrCode32 id, Type type)
         {
-            RouteIdMap = new StringId32Map(dictionaryPath);
+            Debug.Assert(RouteNodeEventMap.TryAdd(id, type));
+        }
+
+        public static void RegisterIdMaps(string routeIdDictionaryPath, string eventIdDictionaryPath)
+        {
+            RouteIdMap = new StringId32Map(routeIdDictionaryPath);
+            EventIdMap = new StringId32Map(eventIdDictionaryPath);
+        }
+
+        public static void RegisterEventInfo(string eventInfoPath, string title)
+        {
+            List<(StrCode32, string)> eventIds = new List<(StrCode32, string)>();
+            
+            // Skip header row
+            string[] eventInfo = File.ReadAllLines(eventInfoPath);
+            for (uint i = 1; i < eventInfo.Length; i++)
+            {
+                string[] lineData = eventInfo[i].Split(',');
+
+                string id = lineData[0];
+                StrCode32 idHash = new StrCode32(lineData[1]);
+            
+                bool include = false;
+                string[] testedInTitles = lineData[5].Split(',');
+                foreach (string testedTitle in testedInTitles)
+                {
+                    if (testedTitle == title)
+                    {
+                        include = true;
+                        break;
+                    }
+                }
+                if (!include)
+                    continue;
+                
+                eventIds.Add((idHash, id));
+            }
+            
+            EventIdMap.AddBaseEntries(eventIds);
         }
 
         static GameServiceModule()

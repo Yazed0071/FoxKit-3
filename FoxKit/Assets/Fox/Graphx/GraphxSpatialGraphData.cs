@@ -24,7 +24,7 @@ namespace Fox.Graphx
 
         public virtual bool ResolveNodeEvents(GraphxSpatialGraphDataNode node, int fromIndex) => false;
 
-        public virtual void SetNodeEventType(GraphxSpatialGraphDataNode node, int index, string friendlyName) { }
+        public virtual void SetNodeEventType(GraphxSpatialGraphDataNode node, int index, string id) { }
 
         public virtual void SyncEventTemplates() { }
         public virtual UnityEngine.Object GetNodeEventTemplate() => null;

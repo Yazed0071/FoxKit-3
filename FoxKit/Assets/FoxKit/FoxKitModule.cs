@@ -22,7 +22,7 @@ namespace FoxKit
 
         private static void RegisterDictionaries()
         {
-            GameServiceModule.RegisterRouteIdMap("Assets/FoxKit/Dictionaries/route_ids");
+            GameServiceModule.RegisterIdMaps("Assets/FoxKit/Dictionaries/route_ids", "Assets/FoxKit/Dictionaries/event_ids");
         }
     }
 }

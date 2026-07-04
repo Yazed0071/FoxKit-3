@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Fox;
 using System.IO;
@@ -15,12 +16,13 @@ namespace Fox
         public StringIdMap(string dictionaryPath)
         {
             string baseDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".pathdb");
-            string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".user.pathdb");
+            string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".upathdb");
             
             UserDictionaryPath = userDictionaryPath;
 
-            using (StreamReader baseDictionaryReadStream = new StreamReader(baseDictionaryPath, System.Text.Encoding.ASCII))
+            if (File.Exists(baseDictionaryPath))
             {
+                using StreamReader baseDictionaryReadStream = new StreamReader(baseDictionaryPath, System.Text.Encoding.ASCII);
                 while (baseDictionaryReadStream.ReadLine() is { } entry)
                 {
                     string[] pair = entry.Split("\t");
@@ -29,11 +31,13 @@ namespace Fox
                         StrCode hash = new StrCode(pair[0]);
                         string value = pair[1];
                         if (!TryAddToMap(Map, hash, value))
-                            Debug.LogWarning($"StringIdMap: load entry {entry} already exists in {baseDictionaryPath}.");
+                            Debug.LogWarning(
+                                $"StringIdMap: load entry {entry} already exists in {baseDictionaryPath}.");
                     }
                     else
                     {
-                        Debug.LogWarning($"StringIdMap: can't load malformed entry {entry} at {baseDictionaryPath}.");
+                        Debug.LogWarning(
+                            $"StringIdMap: can't load malformed entry {entry} at {baseDictionaryPath}.");
                     }
                 }
             }
@@ -56,6 +60,14 @@ namespace Fox
                     }
                 }
             }
+        }
+
+        public void AddBaseEntries(List<(StrCode, string)> baseEntries)
+        {
+            foreach ((StrCode hash, string value) in baseEntries)
+                if (!TryAddToMap(Map, hash, value))
+                    if (!TryAddToMap(Map, hash, value))
+                        Debug.LogWarning($"StringIdMap: load entry {(hash, value)} already provided.");
         }
 
         public bool Resolve(StrCode hash, out string value) => Map.TryGetValue(hash, out value);
@@ -109,12 +121,13 @@ namespace Fox
         public StringId32Map(string dictionaryPath)
         {
             string baseDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".pathdb");
-            string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".user.pathdb");
+            string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".upathdb");
             
             UserDictionaryPath = userDictionaryPath;
 
-            using (StreamReader baseDictionaryReadStream = new StreamReader(baseDictionaryPath, System.Text.Encoding.ASCII))
+            if (File.Exists(baseDictionaryPath))
             {
+                using StreamReader baseDictionaryReadStream = new StreamReader(baseDictionaryPath, System.Text.Encoding.ASCII);
                 while (baseDictionaryReadStream.ReadLine() is { } entry)
                 {
                     string[] pair = entry.Split("\t");
@@ -150,6 +163,14 @@ namespace Fox
                     }
                 }
             }
+        }
+
+        public void AddBaseEntries(List<(StrCode32, string)> baseEntries)
+        {
+            foreach ((StrCode32 hash, string value) in baseEntries)
+                if (!TryAddToMap(Map, hash, value))
+                    if (!TryAddToMap(Map, hash, value))
+                        Debug.LogWarning($"StringId32Map: load entry {(hash, value)} already provided.");
         }
 
         public bool Resolve(StrCode32 hash, out string value) => Map.TryGetValue(hash, out value);
