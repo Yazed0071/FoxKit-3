@@ -20,17 +20,6 @@ namespace Fox.Graphx
             context.OverrideProperty(nameof(position), Fox.Math.UnityToFoxVector3(position));
         }
 
-        private static readonly Vector3 Scale = Vector3.one * 0.25f;
-        // public void OnDrawGizmos()
-        // {
-        //     Gizmos.matrix = Matrix4x4.identity;
-        //     Gizmos.color = EditorColors.PlayerUtilityColor;
-        //     if (!this.transform.parent)
-        //         Gizmos.DrawWireCube(this.transform.TransformPoint(position), Scale);
-        //     else
-        //         Gizmos.DrawWireCube(this.transform.parent.TransformPoint(position), Scale);
-        // }
-
         public virtual int GetDirectionCount() => 0;
         public virtual float GetDirection(int index) => 0f;
         public virtual void SetDirection(int index, float value) { }

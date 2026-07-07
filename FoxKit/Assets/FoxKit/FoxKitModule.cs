@@ -1,28 +1,34 @@
-using System.Collections.Generic;
-using System.IO;
 using Fox;
 using Fox.Fs;
 using Fox.GameService;
-using UnityEditor;
-using UnityEngine;
 
 namespace FoxKit
 {
-    public static class FoxKitModule
+    public class FoxKitModule : Module
     {
-        [InitializeOnLoadMethod]
-        private static void Initialize()
+        public static FoxKitModule Instance { get; private set; }
+
+        public FoxKitModule() : base("FoxKit")
+        {
+            Instance = this;
+            AddDependencyModule("Fox.Fs");
+            AddDependencyModule("Fox.GameService");
+        }
+
+        public override void Init()
         {
             FsModule.UnityBasePath = SettingsManager.UnityBasePath;
             FsModule.ExternalBasePath = SettingsManager.ExternalBasePath;
             FsModule.LooseBasePath = SettingsManager.LooseBasePath;
-            
+
             RegisterDictionaries();
         }
 
         private static void RegisterDictionaries()
         {
-            GameServiceModule.RegisterIdMaps("Assets/FoxKit/Dictionaries/route_ids", "Assets/FoxKit/Dictionaries/event_ids");
+            GameServiceModule.RegisterIdMaps("/Assets/tpp/toolbox/Config/route_ids", "/Assets/tpp/toolbox/Config/event_ids");
+            
+            GameServiceModule.RegisterEventInfo("/Assets/tpp/toolbox/Config/EventInfo.csv", "tpp");
         }
     }
 }

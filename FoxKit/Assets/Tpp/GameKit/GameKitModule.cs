@@ -1,18 +1,20 @@
-using System;
-using System.IO;
 using Fox;
 using Fox.GameService;
-using UnityEditor;
 
 namespace Tpp.GameKit
 {
-    [InitializeOnLoad]
-    public static class GameKitModule
+    public class GameKitModule : Module
     {
-        static GameKitModule()
+        public static GameKitModule Instance { get; private set; }
+
+        public GameKitModule() : base("Tpp.GameKit")
         {
-            GameServiceModule.RegisterEventInfo("Assets/Tpp/GameKit/Route/EventInfo.csv", "tpp");
-            
+            Instance = this;
+            AddDependencyModule("Fox.GameService");
+        }
+
+        public override void Init()
+        {
             GameServiceModule.RegisterRouteNodeEventType(new StrCode32("SendMessage"), typeof(TppRouteNodeEventSendMessage));
             GameServiceModule.RegisterRouteNodeEventType(new StrCode32("SwitchRoute"), typeof(TppRouteNodeEventSwitchRoute));
             GameServiceModule.RegisterRouteNodeEventType(new StrCode32("SyncRoute"), typeof(TppRouteNodeEventSyncRoute));
@@ -21,7 +23,7 @@ namespace Tpp.GameKit
             GameServiceModule.RegisterRouteNodeEventType(new StrCode32("ConversationIdle"), typeof(TppRouteNodeEventConversationIdle));
             GameServiceModule.RegisterRouteNodeEventType(new StrCode32("PutHostageInVehicle"), typeof(TppRouteNodeEventPutHostageInVehicle));
             GameServiceModule.RegisterRouteNodeEventType(new StrCode32("TakeHostageOutOfVehicle"), typeof(TppRouteNodeEventTakeHostageOutOfVehicle));
-            
+
             GameServiceModule.RegisterRouteEdgeEventType(new StrCode32("Move"), typeof(TppRouteEdgeEventMove));
             GameServiceModule.RegisterRouteEdgeEventType(new StrCode32("VehicleMoveSlow"), typeof(TppRouteEdgeEventVehicleMoveSlow));
             GameServiceModule.RegisterRouteEdgeEventType(new StrCode32("VehicleMoveNormal"), typeof(TppRouteEdgeEventVehicleMoveNormal));

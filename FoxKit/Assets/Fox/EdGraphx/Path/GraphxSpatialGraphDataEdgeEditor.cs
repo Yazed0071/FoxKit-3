@@ -12,6 +12,16 @@ namespace Fox.EdGraphx
 
         private bool HasFrameBounds() => Edge.transform.parent.GetComponent<GraphxSpatialGraphData>() is not null && Edge.prevNode is not null && Edge.nextNode is not null;
 
+        public Bounds OnGetFrameBounds()
+        {
+            GraphxSpatialGraphData graph = Edge.transform.parent.GetComponent<GraphxSpatialGraphData>();
+            
+            var bounds = new Bounds(graph.GetGraphWorldPosition((Edge.prevNode as GraphxSpatialGraphDataNode).position), new Vector3(0, 0, 0));
+            bounds.Encapsulate(graph.GetGraphWorldPosition((Edge.nextNode as GraphxSpatialGraphDataNode).position));
+
+            return bounds;
+        }
+
         private void OnEnable()
         {
             Tools.hidden = true;
@@ -20,17 +30,6 @@ namespace Fox.EdGraphx
         private void OnDisable()
         {
             Tools.hidden = false;
-        }
-
-        public Bounds OnGetFrameBounds()
-        {
-            GraphxSpatialGraphData graph = Edge.transform.parent.GetComponent<GraphxSpatialGraphData>();
-
-            var bounds = new Bounds(graph.GetGraphWorldPosition((Edge.prevNode as GraphxSpatialGraphDataNode).position),
-                new Vector3(0, 0, 0));
-            bounds.Encapsulate(graph.GetGraphWorldPosition((Edge.nextNode as GraphxSpatialGraphDataNode).position));
-
-            return bounds;
         }
     }
 }

@@ -15,14 +15,14 @@ namespace Fox
 
         public StringIdMap(string dictionaryPath)
         {
-            string baseDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".pathdb");
-            string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".upathdb");
+            string baseDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".stringdb");
+            string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".ustringdb");
             
             UserDictionaryPath = userDictionaryPath;
 
-            if (File.Exists(baseDictionaryPath))
+            if (Fox.Fs.FileSystem.Exists(baseDictionaryPath))
             {
-                using StreamReader baseDictionaryReadStream = new StreamReader(baseDictionaryPath, System.Text.Encoding.ASCII);
+                using StreamReader baseDictionaryReadStream = new StreamReader(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(baseDictionaryPath), System.Text.Encoding.ASCII);
                 while (baseDictionaryReadStream.ReadLine() is { } entry)
                 {
                     string[] pair = entry.Split("\t");
@@ -42,7 +42,7 @@ namespace Fox
                 }
             }
 
-            using (StreamReader userDictionaryReadStream = new StreamReader(userDictionaryPath, System.Text.Encoding.ASCII))
+            using (StreamReader userDictionaryReadStream = new StreamReader(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(UserDictionaryPath), System.Text.Encoding.ASCII))
             {
                 while (userDictionaryReadStream.ReadLine() is { } entry)
                 {
@@ -52,11 +52,11 @@ namespace Fox
                         StrCode hash = new StrCode(pair[0]);
                         string value = pair[1];
                         if (!TryAddToMap(Map, hash, value))
-                            Debug.LogWarning($"StringIdMap: load entry {entry} already exists in {baseDictionaryPath} or {userDictionaryPath}.");
+                            Debug.LogWarning($"StringIdMap: load entry {entry} already exists in {baseDictionaryPath} or {UserDictionaryPath}.");
                     }
                     else
                     {
-                        Debug.LogWarning($"StringIdMap: can't load malformed entry {entry} at {userDictionaryPath}.");
+                        Debug.LogWarning($"StringIdMap: can't load malformed entry {entry} at {UserDictionaryPath}.");
                     }
                 }
             }
@@ -85,7 +85,7 @@ namespace Fox
 
         public void Save()
         {
-            using StreamWriter userDictionaryWriteStream = new StreamWriter(UserDictionaryPath, append: true, System.Text.Encoding.ASCII);
+            using StreamWriter userDictionaryWriteStream = new StreamWriter(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(UserDictionaryPath), append: true, System.Text.Encoding.ASCII);
             foreach ((StrCode hash, string value) in AddQueue)
             {
                 userDictionaryWriteStream.WriteLine($"{hash}\t{value}");
@@ -120,14 +120,14 @@ namespace Fox
 
         public StringId32Map(string dictionaryPath)
         {
-            string baseDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".pathdb");
-            string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".upathdb");
+            string baseDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".stringdb");
+            string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".ustringdb");
             
             UserDictionaryPath = userDictionaryPath;
 
-            if (File.Exists(baseDictionaryPath))
+            if (Fox.Fs.FileSystem.Exists(baseDictionaryPath))
             {
-                using StreamReader baseDictionaryReadStream = new StreamReader(baseDictionaryPath, System.Text.Encoding.ASCII);
+                using StreamReader baseDictionaryReadStream = new StreamReader(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(baseDictionaryPath), System.Text.Encoding.ASCII);
                 while (baseDictionaryReadStream.ReadLine() is { } entry)
                 {
                     string[] pair = entry.Split("\t");
@@ -145,7 +145,7 @@ namespace Fox
                 }
             }
 
-            using (StreamReader userDictionaryReadStream = new StreamReader(userDictionaryPath, System.Text.Encoding.ASCII))
+            using (StreamReader userDictionaryReadStream = new StreamReader(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(UserDictionaryPath), System.Text.Encoding.ASCII))
             {
                 while (userDictionaryReadStream.ReadLine() is { } entry)
                 {
@@ -155,11 +155,11 @@ namespace Fox
                         StrCode32 hash = new StrCode32(pair[0]);
                         string value = pair[1];
                         if (!TryAddToMap(Map, hash, value))
-                            Debug.LogWarning($"StringId32Map: load entry {entry} already exists in {baseDictionaryPath} or {userDictionaryPath}.");
+                            Debug.LogWarning($"StringId32Map: load entry {entry} already exists in {baseDictionaryPath} or {UserDictionaryPath}.");
                     }
                     else
                     {
-                        Debug.LogWarning($"StringId32Map: can't load malformed entry {entry} at {userDictionaryPath}.");
+                        Debug.LogWarning($"StringId32Map: can't load malformed entry {entry} at {UserDictionaryPath}.");
                     }
                 }
             }
@@ -188,7 +188,7 @@ namespace Fox
 
         public void Save()
         {
-            using StreamWriter userDictionaryWriteStream = new StreamWriter(UserDictionaryPath, append: true, System.Text.Encoding.ASCII);
+            using StreamWriter userDictionaryWriteStream = new StreamWriter(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(UserDictionaryPath), append: true, System.Text.Encoding.ASCII);
             foreach ((StrCode32 hash, string value) in AddQueue)
             {
                 userDictionaryWriteStream.WriteLine($"{hash}\t{value}");

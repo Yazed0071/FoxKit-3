@@ -50,10 +50,10 @@ namespace Fox.GameService
                 string routeId = route.name;
                 
                 GameServiceModule.RouteIdMap.Add(routeId);
-                
+
                 writer.WriteStrCode32(new StrCode32(routeId));
             }
-            
+
             GameServiceModule.RouteIdMap.Save();
 
             return routeIdsOffset;

@@ -13,6 +13,10 @@ namespace Assets.Fox.EdGraphx
     {
         protected new GraphxSpatialGraphData target => base.target as GraphxSpatialGraphData;
 
+        private bool HasFrameBounds() => target.nodes.Count > 0;
+
+        public Bounds OnGetFrameBounds() => target.GetWorldBounds();
+
         public override VisualElement CreateInspectorGUI()
         {
             VisualElement container = new VisualElement();

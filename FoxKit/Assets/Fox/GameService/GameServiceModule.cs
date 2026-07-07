@@ -1,21 +1,29 @@
-using Fox.Fio;
 using Fox;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 namespace Fox.GameService
 {
-    [InitializeOnLoad]
-    public static class GameServiceModule
+    public class GameServiceModule : Module
     {
+        public static GameServiceModule Instance { get; private set; }
+
         internal static Dictionary<StrCode32, Type> RouteEdgeEventMap = new();
         internal static Dictionary<StrCode32, Type> RouteNodeEventMap = new();
 
         internal static StringId32Map RouteIdMap = null;
         internal static StringId32Map EventIdMap = null;
+
+        public GameServiceModule() : base("Fox.GameService")
+        {
+            Instance = this;
+            
+            AddDependencyModule("Fox.Kernel");
+            AddDependencyModule("Fox.Core");
+            AddDependencyModule("Fox.Graphx");
+        }
 
         public static void RegisterRouteEdgeEventType(StrCode32 id, Type type)
         {
@@ -36,16 +44,16 @@ namespace Fox.GameService
         public static void RegisterEventInfo(string eventInfoPath, string title)
         {
             List<(StrCode32, string)> eventIds = new List<(StrCode32, string)>();
-            
+
             // Skip header row
-            string[] eventInfo = File.ReadAllLines(eventInfoPath);
+            string[] eventInfo = Fox.Fs.FileSystem.ReadLines(eventInfoPath);
             for (uint i = 1; i < eventInfo.Length; i++)
             {
                 string[] lineData = eventInfo[i].Split(',');
 
                 string id = lineData[0];
                 StrCode32 idHash = new StrCode32(lineData[1]);
-            
+
                 bool include = false;
                 string[] testedInTitles = lineData[5].Split(',');
                 foreach (string testedTitle in testedInTitles)
@@ -58,15 +66,11 @@ namespace Fox.GameService
                 }
                 if (!include)
                     continue;
-                
+
                 eventIds.Add((idHash, id));
             }
-            
-            EventIdMap.AddBaseEntries(eventIds);
-        }
 
-        static GameServiceModule()
-        {
+            EventIdMap.AddBaseEntries(eventIds);
         }
     }
 }

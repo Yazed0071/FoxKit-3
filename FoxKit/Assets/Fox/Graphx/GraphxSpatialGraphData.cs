@@ -1,5 +1,6 @@
 ﻿using Fox.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -12,6 +13,58 @@ namespace Fox.Graphx
         public Matrix4x4 GetGraphWorldMatrix() => Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
 
         public Vector3 GetGraphWorldPosition(Vector3 pos) => GetGraphWorldMatrix().MultiplyPoint(pos);
+
+        public Bounds GetWorldBounds()
+        {
+            if (nodes.Count == 0)
+                return new Bounds(transform.position, Vector3.zero);
+
+            var matrix = GetGraphWorldMatrix();
+            var bounds = new Bounds(matrix.MultiplyPoint(nodes[0].position), Vector3.zero);
+            for (int i = 1; i < nodes.Count; i++)
+                bounds.Encapsulate(matrix.MultiplyPoint(nodes[i].position));
+
+            return bounds;
+        }
+
+        public bool IsVisibleInFrustum(Camera camera)
+        {
+            if (camera == null || nodes.Count == 0)
+                return true;
+
+            var planes = GeometryUtility.CalculateFrustumPlanes(camera);
+            return GeometryUtility.TestPlanesAABB(planes, GetWorldBounds());
+        }
+
+        private static readonly Vector3 NodeGizmoScale = Vector3.one * 0.25f;
+
+        private Vector3[] GizmoVertexCache = null;
+
+        private void DrawGizmos(bool isSelected)
+        {
+            if (nodes.Count == 0 || !IsVisibleInFrustum(Camera.current))
+                return;
+
+            Gizmos.matrix = Matrix4x4.identity;
+            Gizmos.color = isSelected ? EditorColors.GenericSelectedColor : EditorColors.GenericUnselectedColor;
+
+            if (GizmoVertexCache == null || GizmoVertexCache.Length < nodes.Count)
+                GizmoVertexCache = new Vector3[nodes.Count];
+            
+            var matrix = GetGraphWorldMatrix();
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                Vector3 vertex = matrix.MultiplyPoint(nodes[i].position);
+                GizmoVertexCache[i] = vertex;
+                Gizmos.DrawWireCube(vertex, NodeGizmoScale);
+            }
+
+            Gizmos.DrawLineStrip(GizmoVertexCache, IsLoop());
+        }
+
+        public void OnDrawGizmos() => DrawGizmos(false);
+
+        public void OnDrawGizmosSelected() => DrawGizmos(true);
 
         public virtual Type GetNodeType() => typeof(GraphxSpatialGraphDataNode);
         public virtual Type GetEdgeType() => typeof(GraphxSpatialGraphDataEdge);

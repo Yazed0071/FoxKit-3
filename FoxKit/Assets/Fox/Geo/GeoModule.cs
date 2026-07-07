@@ -1,15 +1,20 @@
-﻿using Fox.Core;
+using Fox.Core;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace Fox.Geo
 {
-    [InitializeOnLoad]
-    public static class GeoModule
+    public class GeoModule : Module
     {
+        public static GeoModule Instance { get; private set; }
+
         internal static Dictionary<GeoPrimType, Func<GeomHeaderContext, TransformData>> GeoPrimDeserializationMap = new();
+
+        public GeoModule() : base("Fox.Geo")
+        {
+            Instance = this;
+        }
 
         public static void RegisterGeomHeaderDeserializationCallback(GeoPrimType type, Func<GeomHeaderContext, TransformData> deserializeFunc)
         {
@@ -17,10 +22,6 @@ namespace Fox.Geo
             Debug.Assert(deserializeFunc != null);
 
             Debug.Assert(GeoPrimDeserializationMap.TryAdd(type, deserializeFunc));
-        }
-
-        static GeoModule()
-        {
         }
     }
 }
