@@ -27,7 +27,7 @@ namespace Fox.GameService
             //events[index].dir = value;
         }
 
-        public override System.Type GetNodeEventTypeAt(int index)
+        public System.Type GetNodeEventTypeAt(int index)
         {
             if (index >= 0 && index < events.Count && events[index] != null)
                 return events[index].GetType();

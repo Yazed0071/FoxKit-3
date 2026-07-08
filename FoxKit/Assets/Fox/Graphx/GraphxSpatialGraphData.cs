@@ -70,19 +70,6 @@ namespace Fox.Graphx
         public virtual Type GetEdgeType() => typeof(GraphxSpatialGraphDataEdge);
         public virtual bool IsLoop() => true;
 
-        public virtual Type GetEdgeEventType() => null;
-        public virtual Type GetNodeEventType() => null;
-
-        public virtual void AddNodeEvent(GraphxSpatialGraphDataNode node) { }
-
-        public virtual bool ResolveNodeEvents(GraphxSpatialGraphDataNode node, int fromIndex) => false;
-
-        public virtual void SetNodeEventType(GraphxSpatialGraphDataNode node, int index, string id) { }
-
-        public virtual void SyncEventTemplates() { }
-        public virtual UnityEngine.Object GetNodeEventTemplate() => null;
-        public virtual UnityEngine.Object GetEdgeEventTemplate() => null;
-
         public int IndexOf(GraphxSpatialGraphDataNode node)
         {
             return this.nodes.IndexOf(node);
@@ -149,6 +136,7 @@ namespace Fox.Graphx
             if (pred != null && succ != null && pred != succ)
             {
                 incoming.nextNode = succ;
+                incoming.transform.SetParent(succ.transform); // re-parent under the new nextNode so it survives the node's deletion
                 succ.outlinks.Remove(outgoing);
                 succ.outlinks.Add(incoming);
                 RemoveEdge(outgoing);

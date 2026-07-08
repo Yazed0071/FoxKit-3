@@ -11,16 +11,16 @@ namespace Fox.GameService
     {
         public override Type GetNodeType() => typeof(GsRouteDataNode);
         public override Type GetEdgeType() => typeof(GsRouteDataEdge);
-        public override Type GetEdgeEventType() => typeof(GsRouteDataEdgeEvent);
-        public override Type GetNodeEventType() => typeof(GsRouteDataNodeEvent);
+        public Type GetEdgeEventType() => typeof(GsRouteDataEdgeEvent);
+        public Type GetNodeEventType() => typeof(GsRouteDataNodeEvent);
 
-        private string DefaultEdgeEvent = "RelaxedStandWalkAct";
-        private string DefaultNodeEvent = "";
+        [SerializeField] private string DefaultEdgeEvent = "RelaxedStandWalkAct";
+        [SerializeField] private string DefaultNodeEvent = "";
 
         [SerializeField] private GsRouteDataNodeEvent templateNodeEvent;
         [SerializeField] private GsRouteDataEdgeEvent templateEdgeEvent;
 
-        public override void AddNodeEvent(GraphxSpatialGraphDataNode node)
+        public void AddNodeEvent(GraphxSpatialGraphDataNode node)
         {
             GsRouteDataNode routeNode = node as GsRouteDataNode;
             if (routeNode == null)
@@ -35,7 +35,7 @@ namespace Fox.GameService
             EditorUtility.SetDirty(routeNode);
         }
 
-        public override bool ResolveNodeEvents(GraphxSpatialGraphDataNode node, int fromIndex)
+        public bool ResolveNodeEvents(GraphxSpatialGraphDataNode node, int fromIndex)
         {
             GsRouteDataNode routeNode = node as GsRouteDataNode;
             if (routeNode == null)
@@ -79,7 +79,7 @@ namespace Fox.GameService
             return changed;
         }
 
-        public override void SetNodeEventType(GraphxSpatialGraphDataNode node, int index, string id)
+        public void SetNodeEventType(GraphxSpatialGraphDataNode node, int index, string id)
         {
             GsRouteDataNode routeNode = node as GsRouteDataNode;
             if (routeNode == null || index < 0 || index >= routeNode.events.Count)
@@ -180,7 +180,7 @@ namespace Fox.GameService
             return edgeEvent;
         }
 
-        public override void SyncEventTemplates()
+        public void SyncEventTemplates()
         {
             var newNode = SyncTemplate(templateNodeEvent, DefaultNodeEvent, "Default Node Event") as GsRouteDataNodeEvent;
             var newEdge = SyncTemplate(templateEdgeEvent, DefaultEdgeEvent, "Default Edge Event") as GsRouteDataEdgeEvent;
@@ -196,8 +196,8 @@ namespace Fox.GameService
             EditorUtility.SetDirty(this);
         }
 
-        public override UnityEngine.Object GetNodeEventTemplate() => templateNodeEvent;
-        public override UnityEngine.Object GetEdgeEventTemplate() => templateEdgeEvent;
+        public UnityEngine.Object GetNodeEventTemplate() => templateNodeEvent;
+        public UnityEngine.Object GetEdgeEventTemplate() => templateEdgeEvent;
 
         private GsRouteDataNodeEvent SyncTemplate(GsRouteDataNodeEvent existing, string id, string label)
         {
