@@ -1,5 +1,4 @@
-﻿using Assets.Fox.EdGraphx;
-using Fox.Graphx;
+﻿using Fox.Graphx;
 using UnityEditor;
 using UnityEngine;
 

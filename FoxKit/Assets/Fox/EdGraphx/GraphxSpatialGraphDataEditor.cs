@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Assets.Fox.EdGraphx
+namespace Fox.EdGraphx
 {
     [CustomEditor(typeof(GraphxSpatialGraphData), true)]
     public class GraphxSpatialGraphDataEditor : UnityEditor.Editor

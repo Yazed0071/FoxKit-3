@@ -175,7 +175,7 @@ namespace Fox.GameService
 
                             if (evt->Type == RouteEventType.Edge)
                             {
-                                GsRouteDataEdgeEvent edgeEvent = (GsRouteDataEdgeEvent)(GameServiceModule.RouteEdgeEventMap.TryGetValue(evt->Id, out Type eventType)
+                                GsRouteDataEdgeEvent edgeEvent = (GsRouteDataEdgeEvent)(GameServiceModule.RouteEdgeEventTypeMap.TryGetValue(evt->Id, out Type eventType)
                                     ? routeEventObject.AddComponent(eventType)
                                     : routeEventObject.AddComponent<GsRouteDataEdgeEvent>());
                                 edge.@event = edgeEvent;
@@ -195,7 +195,7 @@ namespace Fox.GameService
                             }
                             else
                             {
-                                GsRouteDataNodeEvent nodeEvent = (GsRouteDataNodeEvent)(GameServiceModule.RouteNodeEventMap.TryGetValue(evt->Id, out Type eventType)
+                                GsRouteDataNodeEvent nodeEvent = (GsRouteDataNodeEvent)(GameServiceModule.RouteNodeEventTypeMap.TryGetValue(evt->Id, out Type eventType)
                                     ? routeEventObject.AddComponent(eventType)
                                     : routeEventObject.AddComponent<GsRouteDataNodeEvent>());
                                 node.events.Add(nodeEvent);

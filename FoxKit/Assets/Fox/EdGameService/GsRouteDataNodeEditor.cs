@@ -1,11 +1,9 @@
 using Fox.EdGraphx;
 using Fox.GameService;
-using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace FoxKit.Editor.GsRoute
+namespace Fox.EdGameService
 {
     [CustomEditor(typeof(GsRouteDataNode))]
     public class GsRouteDataNodeEditor : GraphxSpatialGraphDataNodeEditor
@@ -62,40 +60,17 @@ namespace FoxKit.Editor.GsRoute
         {
             section.Clear();
 
-            const string none = "(None)";
-            List<string> choices = new List<string> { none };
-            foreach ((string id, Type _) in GameServiceModule.RouteNodeEvents)
-                choices.Add(id);
-
             int count = Node.GetDirectionCount();
             for (int i = 0; i < count; i++)
             {
-                int index = i;
-                string currentName = EventName(Node.GetNodeEventTypeAt(index)) ?? none;
+                string currentName = Node.events[i].action;
 
-                int selected = choices.IndexOf(currentName);
-                if (selected < 0)
-                    selected = 0;
+                int selected = GameServiceModule.RouteNodeEvents.IndexOf(currentName);
 
-                PopupField<string> dropdown = new PopupField<string>($"Event {index} Type", choices, selected);
-                dropdown.RegisterValueChangedCallback(evt =>
-                    eventGraph.SetNodeEventType(Node, index, evt.newValue == none ? "" : evt.newValue));
+                PopupField<string> dropdown = new PopupField<string>($"Event {i} Type", GameServiceModule.RouteNodeEvents, selected);
+                dropdown.RegisterValueChangedCallback(evt => eventGraph.SetNodeEventType(Node, i, evt.newValue));
                 section.Add(dropdown);
             }
-        }
-
-        // Registered event type -> its name, or null if unregistered.
-        private static string EventName(Type type)
-        {
-            if (type != null)
-            {
-                foreach ((string id, Type registered) in GameServiceModule.RouteNodeEvents)
-                {
-                    if (registered == type)
-                        return id;
-                }
-            }
-            return null;
         }
     }
 }

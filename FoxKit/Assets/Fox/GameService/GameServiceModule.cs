@@ -10,12 +10,11 @@ namespace Fox.GameService
     {
         public static GameServiceModule Instance { get; private set; }
 
-        internal static Dictionary<StrCode32, Type> RouteEdgeEventMap = new();
-        internal static Dictionary<StrCode32, Type> RouteNodeEventMap = new();
+        internal static Dictionary<StrCode32, Type> RouteEdgeEventTypeMap = new();
+        internal static Dictionary<StrCode32, Type> RouteNodeEventTypeMap = new();
 
-        // Registered (name, type) pairs, in registration order, for editor UI.
-        public static readonly List<(string Id, Type Type)> RouteEdgeEvents = new();
-        public static readonly List<(string Id, Type Type)> RouteNodeEvents = new();
+        public static readonly List<string> RouteEdgeEvents = new();
+        public static readonly List<string> RouteNodeEvents = new();
 
         internal static StringId32Map RouteIdMap = null;
         internal static StringId32Map EventIdMap = null;
@@ -29,20 +28,14 @@ namespace Fox.GameService
             AddDependencyModule("Fox.Graphx");
         }
 
-        public static void RegisterRouteEdgeEventType(string id, Type type)
+        public static void RegisterRouteNodeEventTypeOverride(StrCode32 id, Type type)
         {
-            bool added = RouteEdgeEventMap.TryAdd(new StrCode32(id), type);
-            Debug.Assert(added);
-            if (added)
-                RouteEdgeEvents.Add((id, type));
+            Debug.Assert(RouteNodeEventTypeMap.TryAdd(id, type));
         }
 
-        public static void RegisterRouteNodeEventType(string id, Type type)
+        public static void RegisterRouteEdgeEventTypeOverride(StrCode32 id, Type type)
         {
-            bool added = RouteNodeEventMap.TryAdd(new StrCode32(id), type);
-            Debug.Assert(added);
-            if (added)
-                RouteNodeEvents.Add((id, type));
+            Debug.Assert(RouteEdgeEventTypeMap.TryAdd(id, type));
         }
 
         public static void RegisterIdMaps(string routeIdDictionaryPath, string eventIdDictionaryPath)
@@ -78,6 +71,11 @@ namespace Fox.GameService
                     continue;
 
                 eventIds.Add((idHash, id));
+                
+                if (lineData[2] == "Node")
+                    RouteNodeEvents.Add(id);
+                else
+                    RouteEdgeEvents.Add(id);
             }
 
             EventIdMap.AddBaseEntries(eventIds);

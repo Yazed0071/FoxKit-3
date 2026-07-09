@@ -1,12 +1,12 @@
-using Assets.Fox.EdGraphx;
 using Fox.GameService;
 using System;
 using System.Collections.Generic;
+using Fox.EdGraphx;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace FoxKit.Editor.GsRoute
+namespace Fox.EdGameService
 {
     [CustomEditor(typeof(GsRouteData))]
     public class GsRouteDataEditor : GraphxSpatialGraphDataEditor
@@ -43,32 +43,22 @@ namespace FoxKit.Editor.GsRoute
             });
         }
 
-        private void AddEventDropdown(VisualElement container, string propertyName, List<(string Id, Type Type)> events, string label, Action onChanged)
+        private void AddEventDropdown(VisualElement container, string propertyName, List<string> eventList, string label, Action onChanged)
         {
-            var prop = serializedObject.FindProperty(propertyName);
+            SerializedProperty prop = serializedObject.FindProperty(propertyName);
             if (prop == null)
                 return;
 
-            const string none = "(None)";
-            var choices = new List<string> { none };
-            foreach ((string id, Type _) in events)
-                choices.Add(id);
+            int selectedIndex = eventList.IndexOf(prop.stringValue);
 
-            int index = choices.IndexOf(prop.stringValue);
-            if (index < 0)
-                index = 0;
-
-            var popup = new PopupField<string>(label, choices, index);
+            PopupField<string> popup = new PopupField<string>(label, eventList, selectedIndex);
             popup.RegisterValueChangedCallback(evt =>
             {
-                var liveProp = serializedObject.FindProperty(propertyName);
+                SerializedProperty liveProp = serializedObject.FindProperty(propertyName);
                 if (liveProp == null)
                     return;
-
-                if (evt.newValue == none)
-                    liveProp.stringValue = "";
-                else
-                    liveProp.stringValue = evt.newValue;
+                
+                liveProp.stringValue = evt.newValue;
 
                 serializedObject.ApplyModifiedProperties();
                 onChanged?.Invoke();

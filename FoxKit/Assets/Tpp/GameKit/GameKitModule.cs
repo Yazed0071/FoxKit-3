@@ -15,23 +15,23 @@ namespace Tpp.GameKit
 
         public override void Init()
         {
-            GameServiceModule.RegisterRouteNodeEventType("SendMessage", typeof(TppRouteNodeEventSendMessage));
-            GameServiceModule.RegisterRouteNodeEventType("SwitchRoute", typeof(TppRouteNodeEventSwitchRoute));
-            GameServiceModule.RegisterRouteNodeEventType("SyncRoute", typeof(TppRouteNodeEventSyncRoute));
-            GameServiceModule.RegisterRouteNodeEventType("RelaxedIdleAct", typeof(TppRouteNodeEventRelaxedIdleAct));
-            GameServiceModule.RegisterRouteNodeEventType("CautionIdleAct", typeof(TppRouteNodeEventCautionIdleAct));
-            GameServiceModule.RegisterRouteNodeEventType("ConversationIdle", typeof(TppRouteNodeEventConversationIdle));
-            GameServiceModule.RegisterRouteNodeEventType("PutHostageInVehicle", typeof(TppRouteNodeEventPutHostageInVehicle));
-            GameServiceModule.RegisterRouteNodeEventType("TakeHostageOutOfVehicle", typeof(TppRouteNodeEventTakeHostageOutOfVehicle));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("SendMessage"), typeof(TppRouteNodeEventSendMessage));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("SwitchRoute"), typeof(TppRouteNodeEventSwitchRoute));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("SyncRoute"), typeof(TppRouteNodeEventSyncRoute));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("RelaxedIdleAct"), typeof(TppRouteNodeEventRelaxedIdleAct));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("CautionIdleAct"), typeof(TppRouteNodeEventCautionIdleAct));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("ConversationIdle"), typeof(TppRouteNodeEventConversationIdle));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("PutHostageInVehicle"), typeof(TppRouteNodeEventPutHostageInVehicle));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("TakeHostageOutOfVehicle"), typeof(TppRouteNodeEventTakeHostageOutOfVehicle));
 
-            GameServiceModule.RegisterRouteEdgeEventType("Move", typeof(TppRouteEdgeEventMove));
-            GameServiceModule.RegisterRouteEdgeEventType("VehicleMoveSlow", typeof(TppRouteEdgeEventVehicleMoveSlow));
-            GameServiceModule.RegisterRouteEdgeEventType("VehicleMoveNormal", typeof(TppRouteEdgeEventVehicleMoveNormal));
-            GameServiceModule.RegisterRouteEdgeEventType("VehicleMoveFast", typeof(TppRouteEdgeEventVehicleMoveFast));
-            GameServiceModule.RegisterRouteEdgeEventType("VehicleBackSlow", typeof(TppRouteEdgeEventVehicleBackSlow));
-            GameServiceModule.RegisterRouteEdgeEventType("VehicleBackNormal", typeof(TppRouteEdgeEventVehicleBackNormal));
-            GameServiceModule.RegisterRouteEdgeEventType("VehicleBackFast", typeof(TppRouteEdgeEventVehicleBackFast));
-            GameServiceModule.RegisterRouteEdgeEventType("VehicleKmPerHour", typeof(TppRouteEdgeEventVehicleKmPerHour));
+            GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("Move"), typeof(TppRouteEdgeEventMove));
+            GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleMoveSlow"), typeof(TppRouteEdgeEventVehicleMoveSlow));
+            GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleMoveNormal"), typeof(TppRouteEdgeEventVehicleMoveNormal));
+            GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleMoveFast"), typeof(TppRouteEdgeEventVehicleMoveFast));
+            GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleBackSlow"), typeof(TppRouteEdgeEventVehicleBackSlow));
+            GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleBackNormal"), typeof(TppRouteEdgeEventVehicleBackNormal));
+            GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleBackFast"), typeof(TppRouteEdgeEventVehicleBackFast));
+            GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleKmPerHour"), typeof(TppRouteEdgeEventVehicleKmPerHour));
         }
     }
 }

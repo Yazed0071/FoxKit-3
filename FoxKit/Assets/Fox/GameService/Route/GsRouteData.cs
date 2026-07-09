@@ -157,7 +157,7 @@ namespace Fox.GameService
             var go = new GameObject();
             Undo.RegisterCreatedObjectUndo(go, "Add Default Node Event");
             
-            GsRouteDataNodeEvent nodeEvent = (GsRouteDataNodeEvent)(GameServiceModule.RouteNodeEventMap.TryGetValue(new StrCode32(id), out Type eventType)
+            GsRouteDataNodeEvent nodeEvent = (GsRouteDataNodeEvent)(GameServiceModule.RouteNodeEventTypeMap.TryGetValue(new StrCode32(id), out Type eventType)
                 ? go.AddComponent(eventType)
                 : go.AddComponent<GsRouteDataNodeEvent>());
             
@@ -172,7 +172,7 @@ namespace Fox.GameService
             var go = new GameObject();
             Undo.RegisterCreatedObjectUndo(go, "Add Default Edge Event");
             
-            GsRouteDataEdgeEvent edgeEvent = (GsRouteDataEdgeEvent)(GameServiceModule.RouteEdgeEventMap.TryGetValue(new StrCode32(id), out Type eventType)
+            GsRouteDataEdgeEvent edgeEvent = (GsRouteDataEdgeEvent)(GameServiceModule.RouteEdgeEventTypeMap.TryGetValue(new StrCode32(id), out Type eventType)
                 ? go.AddComponent(eventType)
                 : go.AddComponent<GsRouteDataEdgeEvent>());
             

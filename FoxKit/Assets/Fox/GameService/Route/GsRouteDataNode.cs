@@ -26,13 +26,5 @@ namespace Fox.GameService
             Undo.RecordObject(events[index], "Set Node Event Direction");
             //events[index].dir = value;
         }
-
-        public System.Type GetNodeEventTypeAt(int index)
-        {
-            if (index >= 0 && index < events.Count && events[index] != null)
-                return events[index].GetType();
-
-            return null;
-        }
     }
 }
