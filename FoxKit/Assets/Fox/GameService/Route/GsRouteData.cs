@@ -163,6 +163,7 @@ namespace Fox.GameService
             
             go.transform.SetParent(parent, false);
             go.name = nodeEvent.GetClassEntityInfo().Name;
+            nodeEvent.action = id;
             return nodeEvent;
         }
 
@@ -177,6 +178,7 @@ namespace Fox.GameService
             
             go.transform.SetParent(parent, false);
             go.name = edgeEvent.GetClassEntityInfo().Name;
+            edgeEvent.move = id;
             return edgeEvent;
         }
 
