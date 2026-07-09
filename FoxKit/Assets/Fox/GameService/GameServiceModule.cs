@@ -13,6 +13,10 @@ namespace Fox.GameService
         internal static Dictionary<StrCode32, Type> RouteEdgeEventMap = new();
         internal static Dictionary<StrCode32, Type> RouteNodeEventMap = new();
 
+        // Registered (name, type) pairs, in registration order, for editor UI.
+        public static readonly List<(string Id, Type Type)> RouteEdgeEvents = new();
+        public static readonly List<(string Id, Type Type)> RouteNodeEvents = new();
+
         internal static StringId32Map RouteIdMap = null;
         internal static StringId32Map EventIdMap = null;
 
@@ -25,14 +29,20 @@ namespace Fox.GameService
             AddDependencyModule("Fox.Graphx");
         }
 
-        public static void RegisterRouteEdgeEventType(StrCode32 id, Type type)
+        public static void RegisterRouteEdgeEventType(string id, Type type)
         {
-            Debug.Assert(RouteEdgeEventMap.TryAdd(id, type));
+            bool added = RouteEdgeEventMap.TryAdd(new StrCode32(id), type);
+            Debug.Assert(added);
+            if (added)
+                RouteEdgeEvents.Add((id, type));
         }
 
-        public static void RegisterRouteNodeEventType(StrCode32 id, Type type)
+        public static void RegisterRouteNodeEventType(string id, Type type)
         {
-            Debug.Assert(RouteNodeEventMap.TryAdd(id, type));
+            bool added = RouteNodeEventMap.TryAdd(new StrCode32(id), type);
+            Debug.Assert(added);
+            if (added)
+                RouteNodeEvents.Add((id, type));
         }
 
         public static void RegisterIdMaps(string routeIdDictionaryPath, string eventIdDictionaryPath)

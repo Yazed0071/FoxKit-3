@@ -15,22 +15,17 @@ namespace FoxKit.Editor.GsRoute
 
         protected override void BuildExtraSections(VisualElement container)
         {
-            Type edgeEventType = Route.GetEdgeEventType();
-            Type nodeEventType = Route.GetNodeEventType();
-            if (edgeEventType == null && nodeEventType == null)
-                return;
-
             VisualElement edgeTemplate = new VisualElement();
             VisualElement nodeTemplate = new VisualElement();
 
-            AddEventDropdown(container, "DefaultEdgeEvent", edgeEventType, "Default Edge Event", () =>
+            AddEventDropdown(container, "DefaultEdgeEvent", GameServiceModule.RouteEdgeEvents, "Default Edge Event", () =>
             {
                 Route.SyncEventTemplates();
                 RebuildTemplateSection(edgeTemplate, Route.GetEdgeEventTemplate());
             });
             container.Add(edgeTemplate);
 
-            AddEventDropdown(container, "DefaultNodeEvent", nodeEventType, "Default Node Event", () =>
+            AddEventDropdown(container, "DefaultNodeEvent", GameServiceModule.RouteNodeEvents, "Default Node Event", () =>
             {
                 Route.SyncEventTemplates();
                 RebuildTemplateSection(nodeTemplate, Route.GetNodeEventTemplate());
@@ -48,28 +43,16 @@ namespace FoxKit.Editor.GsRoute
             });
         }
 
-        private void AddEventDropdown(VisualElement container, string propertyName, Type eventBaseType, string label, Action onChanged)
+        private void AddEventDropdown(VisualElement container, string propertyName, List<(string Id, Type Type)> events, string label, Action onChanged)
         {
-            if (eventBaseType == null)
-                return;
-
             var prop = serializedObject.FindProperty(propertyName);
             if (prop == null)
                 return;
 
             const string none = "(None)";
             var choices = new List<string> { none };
-
-            var names = new List<string>();
-            foreach (Type type in TypeCache.GetTypesDerivedFrom(eventBaseType))
-            {
-                if (type.IsAbstract)
-                    continue;
-
-                names.Add(FriendlyEventName(type));
-            }
-            names.Sort();
-            choices.AddRange(names);
+            foreach ((string id, Type _) in events)
+                choices.Add(id);
 
             int index = choices.IndexOf(prop.stringValue);
             if (index < 0)
@@ -100,20 +83,6 @@ namespace FoxKit.Editor.GsRoute
                 return;
 
             section.Add(new InspectorElement(template));
-        }
-
-        private static string FriendlyEventName(Type type)
-        {
-            string name = type.Name;
-            if (name.StartsWith("TppRoute"))
-                name = name.Substring("TppRoute".Length);
-
-            if (name.EndsWith("EdgeEvent"))
-                name = name.Substring(0, name.Length - "EdgeEvent".Length);
-            else if (name.EndsWith("NodeEvent"))
-                name = name.Substring(0, name.Length - "NodeEvent".Length);
-
-            return name;
         }
     }
 }

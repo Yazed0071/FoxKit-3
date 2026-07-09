@@ -62,30 +62,16 @@ namespace FoxKit.Editor.GsRoute
         {
             section.Clear();
 
-            Type typeBase = eventGraph.GetNodeEventType();
-            if (typeBase == null)
-                return;
-
             const string none = "(None)";
             List<string> choices = new List<string> { none };
-
-            List<string> names = new List<string>();
-            foreach (Type type in TypeCache.GetTypesDerivedFrom(typeBase))
-            {
-                if (type.IsAbstract)
-                    continue;
-
-                names.Add(FriendlyEventName(type));
-            }
-            names.Sort();
-            choices.AddRange(names);
+            foreach ((string id, Type _) in GameServiceModule.RouteNodeEvents)
+                choices.Add(id);
 
             int count = Node.GetDirectionCount();
             for (int i = 0; i < count; i++)
             {
                 int index = i;
-                Type type = Node.GetNodeEventTypeAt(index);
-                string currentName = type != null ? FriendlyEventName(type) : none;
+                string currentName = EventName(Node.GetNodeEventTypeAt(index)) ?? none;
 
                 int selected = choices.IndexOf(currentName);
                 if (selected < 0)
@@ -98,18 +84,18 @@ namespace FoxKit.Editor.GsRoute
             }
         }
 
-        private static string FriendlyEventName(Type type)
+        // Registered event type -> its name, or null if unregistered.
+        private static string EventName(Type type)
         {
-            string name = type.Name;
-            if (name.StartsWith("TppRoute"))
-                name = name.Substring("TppRoute".Length);
-
-            if (name.EndsWith("EdgeEvent"))
-                name = name.Substring(0, name.Length - "EdgeEvent".Length);
-            else if (name.EndsWith("NodeEvent"))
-                name = name.Substring(0, name.Length - "NodeEvent".Length);
-
-            return name;
+            if (type != null)
+            {
+                foreach ((string id, Type registered) in GameServiceModule.RouteNodeEvents)
+                {
+                    if (registered == type)
+                        return id;
+                }
+            }
+            return null;
         }
     }
 }
