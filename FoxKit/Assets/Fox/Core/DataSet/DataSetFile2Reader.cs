@@ -137,8 +137,23 @@ namespace Fox.Core
                                 string propertyName = StringTable[propertyDef->Name];
                                 entity.AddDynamicProperty(dataType, propertyName, arraySize, containerType);
 
-                                if (containerType == PropertyInfo.ContainerType.StringMap)
+                                switch (containerType)
                                 {
+                                case PropertyInfo.ContainerType.StaticArray:
+                                    for (ushort k = 0; k < propertyDef->ArraySize; k++)
+                                    {
+                                        object value = ReadPropertyValue(propertyDef, k);
+                                        entity.SetPropertyElement(propertyName, k, new Value(value));
+                                    }
+                                    break;
+                                case PropertyInfo.ContainerType.DynamicArray:
+                                    for (ushort k = 0; k < propertyDef->ArraySize; k++)
+                                    {
+                                        object value = ReadPropertyValue(propertyDef, k);
+                                        entity.AddPropertyElement(propertyName, k, new Value(value));
+                                    }
+                                    break;
+                                case PropertyInfo.ContainerType.StringMap:
                                     for (ushort k = 0; k < propertyDef->ArraySize; k++)
                                     {
                                         byte* payload = (byte*)propertyDef + propertyDef->PayloadOffset;
@@ -147,14 +162,7 @@ namespace Fox.Core
                                         object value = ReadPropertyValue(propertyDef, k);
                                         entity.AddPropertyElement(propertyName, key, new Value(value));
                                     }
-                                }
-                                else
-                                {
-                                    for (ushort k = 0; k < propertyDef->ArraySize; k++)
-                                    {
-                                        object value = ReadPropertyValue(propertyDef, k);
-                                        entity.AddPropertyElement(propertyName, k, new Value(value));
-                                    }
+                                    break;
                                 }
                                 
                                 propertyDef = (DataSetFile2.PropertyDef*)((byte*)propertyDef + propertyDef->NextPropertyOffset);

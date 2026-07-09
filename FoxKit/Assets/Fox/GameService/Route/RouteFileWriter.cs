@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Fox.GameService
 {
-    public class GsRouteSetWriter
+    public class RouteFileWriter
     {
         private const uint Signature = 0x54554F52; // "ROUT"
         private const short Version = 3; //TPP

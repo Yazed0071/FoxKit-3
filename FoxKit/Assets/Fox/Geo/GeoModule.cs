@@ -11,9 +11,13 @@ namespace Fox.Geo
 
         internal static Dictionary<GeoPrimType, Func<GeomHeaderContext, TransformData>> GeoPrimDeserializationMap = new();
 
+        public static readonly string[] RailNoteNames = new string[15];
+
         public GeoModule() : base("Fox.Geo")
         {
             Instance = this;
+
+            RegisterRailNote(0, "junction");
         }
 
         public static void RegisterGeomHeaderDeserializationCallback(GeoPrimType type, Func<GeomHeaderContext, TransformData> deserializeFunc)
@@ -22,6 +26,25 @@ namespace Fox.Geo
             Debug.Assert(deserializeFunc != null);
 
             Debug.Assert(GeoPrimDeserializationMap.TryAdd(type, deserializeFunc));
+        }
+
+        public static void RegisterRailNote(byte index, string name)
+        {
+            if (index < RailNoteNames.Length)
+            {
+                RailNoteNames[index] = name;
+            }
+            else
+            {
+                throw new IndexOutOfRangeException();
+            }
+        }
+
+        public static byte GetRailNoteId(string type)
+        {
+            int index = Array.IndexOf(RailNoteNames, type);
+            
+            return index < RailNoteNames.Length ? (byte)index : (byte)RailNoteNames.Length;
         }
     }
 }

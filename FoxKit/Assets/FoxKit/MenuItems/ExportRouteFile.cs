@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace FoxKit.MenuItems
 {
-    public static class ExportGsRouteFile
+    public static class ExportRouteFile
     {
         [MenuItem("FoxKit/Export/RouteFile")]
         private static void OnExport()
@@ -42,7 +42,7 @@ namespace FoxKit.MenuItems
             }
 
             using BinaryWriter writer = new BinaryWriter(System.IO.File.Open(outputPath, FileMode.Create), System.Text.Encoding.Default);
-            GsRouteSetWriter frtWriter = new GsRouteSetWriter();
+            RouteFileWriter frtWriter = new RouteFileWriter();
 
             frtWriter.Write(writer, scene);
         }

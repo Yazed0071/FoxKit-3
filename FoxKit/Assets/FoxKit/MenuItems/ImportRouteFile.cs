@@ -5,12 +5,12 @@ using UnityEngine.SceneManagement;
 
 namespace FoxKit.MenuItems
 {
-    public class ImportGsRouteFile
+    public class ImportRouteFile
     {
-        [MenuItem("FoxKit/Import/GsRouteFile")]
+        [MenuItem("FoxKit/Import/RouteFile")]
         private static void OnImportAsset()
         {
-            string assetPath = Fox.Fs.FileUtils.OpenFilePanel("Import GsRouteFile", "frt");
+            string assetPath = Fox.Fs.FileUtils.OpenFilePanel("Import RouteFile", "frt");
             if (string.IsNullOrEmpty(assetPath))
                 return;
 
