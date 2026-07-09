@@ -17,6 +17,8 @@ namespace Fox.Geo
     [RequireComponent(typeof(SplineContainer))]
     public class RailData : MonoBehaviour
     {
+        public bool TrimNotes = true;
+        
         public RailNoteData[] Notes;
 
         private static readonly Color NoteColor = new(1f, 0.6f, 0f);
@@ -30,12 +32,17 @@ namespace Fox.Geo
             if (spline is null || spline.Count == 0)
                 return;
 
+            float length = spline.GetLength();
+
             Gizmos.color = isSelected ? Color.white : NoteColor;
 
             uint repeatCount = 0;
             float lastPosition = float.NaN;
             foreach (RailNoteData note in Notes)
             {
+                if (TrimNotes && note.Position > (length + 0.5f))
+                    continue;
+                
                 Vector3 localPosition = spline.GetPointAtLinearDistance(0f, note.Position, out _);
                 Vector3 worldPosition = transform.TransformPoint(localPosition);
 

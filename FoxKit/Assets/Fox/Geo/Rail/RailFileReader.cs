@@ -64,7 +64,7 @@ namespace Fox.Geo
                             Position = note->Position,
                             Extension = *(float*)(extensions + note->ExtensionStartIndex),
                             Name = GeoModule.RailNoteNames[note->Id],
-                            Condition = note->Condition,
+                            Condition = note->Type,
                         };
                     }
 

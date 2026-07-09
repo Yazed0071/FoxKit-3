@@ -100,7 +100,7 @@ namespace Fox.Geo
                         notes[j].Position = noteData[j].Position;
                         notes[j].ExtensionStartIndex = (ushort)j;
                         notes[j].Id = GeoModule.GetRailNoteId(noteData[j].Name);
-                        notes[j].Condition = noteData[j].Condition;
+                        notes[j].Type = noteData[j].Condition;
                     }
                     notes += rail->NoteCount;
 

@@ -70,7 +70,7 @@ namespace Fox.Geo
             public float Position;
             public ushort ExtensionStartIndex;
             public byte Id;
-            public RailNoteType Condition;
+            public RailNoteType Type;
         }
     }
 }
