@@ -11,9 +11,9 @@ namespace Fox.EdGraphx
         private GraphxSpatialGraphDataEdge Target => (GraphxSpatialGraphDataEdge)base.target;
         private GraphxSpatialGraphData Graph => Target.transform.parent.GetComponent<GraphxSpatialGraphData>();
 
-        private bool HasFrameBounds() => Graph != null && Target.prevNode is not null && Target.nextNode is not null;
+        protected bool HasFrameBounds() => Graph != null && Target.prevNode is not null && Target.nextNode is not null;
 
-        public Bounds OnGetFrameBounds()
+        protected Bounds OnGetFrameBounds()
         {
             Matrix4x4 worldMatrix = Graph.transform.worldToLocalMatrix;
 

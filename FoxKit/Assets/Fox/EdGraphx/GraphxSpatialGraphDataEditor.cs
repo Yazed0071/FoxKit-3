@@ -8,7 +8,7 @@ namespace Fox.EdGraphx
     [CustomEditor(typeof(GraphxSpatialGraphData), true)]
     public class GraphxSpatialGraphDataEditor : UnityEditor.Editor
     {
-        protected new GraphxSpatialGraphData Target => (GraphxSpatialGraphData)base.target;
+        protected GraphxSpatialGraphData Target => (GraphxSpatialGraphData)base.target;
 
         protected bool HasFrameBounds() => Target.HasBounds();
 

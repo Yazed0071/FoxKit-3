@@ -19,9 +19,5 @@ namespace Fox.Graphx
 
             context.OverrideProperty(nameof(position), Fox.Math.UnityToFoxVector3(position));
         }
-
-        public virtual int GetDirectionCount() => 0;
-        public virtual float GetDirection(int index) => 0f;
-        public virtual void SetDirection(int index, float value) { }
     }
 }

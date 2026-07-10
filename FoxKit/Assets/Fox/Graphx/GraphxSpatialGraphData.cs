@@ -9,10 +9,6 @@ namespace Fox.Graphx
 {
     public partial class GraphxSpatialGraphData
     {
-        // public Matrix4x4 GetGraphWorldMatrix() => Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
-
-        // public Vector3 GetGraphWorldPosition(Vector3 pos) => GetGraphWorldMatrix().MultiplyPoint(pos);
-
         public bool HasBounds() => nodes.Count > 0;
         
         public Bounds GetWorldBounds()
@@ -54,7 +50,7 @@ namespace Fox.Graphx
                 Vector3 vertex = nodes[i].position;
                 GizmoVertexCache[i] = vertex;
                 
-                Gizmos.DrawWireCube(vertex, NodeGizmoScale);
+                //Gizmos.DrawWireCube(vertex, NodeGizmoScale);
             }
 
             Gizmos.DrawLineStrip(GizmoVertexCache, IsLoop());

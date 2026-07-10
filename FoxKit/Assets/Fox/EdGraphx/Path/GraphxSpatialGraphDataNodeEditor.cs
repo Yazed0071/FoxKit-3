@@ -12,9 +12,9 @@ namespace Fox.EdGraphx
         private GraphxSpatialGraphDataNode Target => (GraphxSpatialGraphDataNode)target;
         private GraphxSpatialGraphData Graph => target.transform.parent.GetComponent<GraphxSpatialGraphData>();
 
-        private bool HasFrameBounds() => Graph != null;
+        protected bool HasFrameBounds() => Graph != null;
 
-        public Bounds OnGetFrameBounds() => new Bounds(Graph.transform.TransformPoint(Target.position), new Vector3(1, 1, 1));
+        protected Bounds OnGetFrameBounds() => new Bounds(Graph.transform.TransformPoint(Target.position), new Vector3(1, 1, 1));
 
         private void OnEnable()
         {
@@ -40,34 +40,13 @@ namespace Fox.EdGraphx
                 Undo.RecordObject(Target, "Move GraphxSpatialGraphDataNode");
                 Target.position = newTargetPosition;
             }
-
-            if (Target.GetDirectionCount() > 0)
-                DrawDirectionHandles();
+            
+            DrawExtraSceneGUI();
         }
 
-        private void DrawDirectionHandles()
+        protected virtual void DrawExtraSceneGUI()
         {
-            Vector3 nodePos = Target.position;
-            float size = HandleUtility.GetHandleSize(nodePos);
-            int count = Target.GetDirectionCount();
-
-            for (int i = 0; i < count; i++)
-            {
-                float dir = Target.GetDirection(i);
-                Quaternion rot = Quaternion.Euler(0f, dir, 0f);
-                Vector3 forward = rot * Vector3.forward;
-                float radius = size * (1.2f + i * 0.5f);
-                Vector3 tip = nodePos + forward * radius;
-
-                Handles.color = Color.cyan;
-                Handles.DrawLine(nodePos, tip);
-                Handles.ConeHandleCap(0, tip, Quaternion.LookRotation(forward), size * 0.15f, EventType.Repaint);
-
-                EditorGUI.BeginChangeCheck();
-                Quaternion newRot = Handles.Disc(rot, nodePos, Vector3.up, radius, false, 0f);
-                if (EditorGUI.EndChangeCheck())
-                    Target.SetDirection(i, newRot.eulerAngles.y);
-            }
+            
         }
 
         public override VisualElement CreateInspectorGUI()
