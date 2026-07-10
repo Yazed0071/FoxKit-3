@@ -8,16 +8,17 @@ namespace Fox.EdGraphx
     [CustomEditor(typeof(GraphxSpatialGraphDataEdge), editorForChildClasses: true)]
     public class GraphxSpatialGraphDataEdgeEditor : EntityEditor
     {
-        private GraphxSpatialGraphDataEdge Edge => (GraphxSpatialGraphDataEdge)target;
+        private GraphxSpatialGraphDataEdge Target => (GraphxSpatialGraphDataEdge)base.target;
+        private GraphxSpatialGraphData Graph => Target.transform.parent.GetComponent<GraphxSpatialGraphData>();
 
-        private bool HasFrameBounds() => Edge.transform.parent.GetComponent<GraphxSpatialGraphData>() is not null && Edge.prevNode is not null && Edge.nextNode is not null;
+        private bool HasFrameBounds() => Graph != null && Target.prevNode is not null && Target.nextNode is not null;
 
         public Bounds OnGetFrameBounds()
         {
-            GraphxSpatialGraphData graph = Edge.transform.parent.GetComponent<GraphxSpatialGraphData>();
-            
-            var bounds = new Bounds(graph.GetGraphWorldPosition((Edge.prevNode as GraphxSpatialGraphDataNode).position), new Vector3(0, 0, 0));
-            bounds.Encapsulate(graph.GetGraphWorldPosition((Edge.nextNode as GraphxSpatialGraphDataNode).position));
+            Matrix4x4 worldMatrix = Graph.transform.worldToLocalMatrix;
+
+            Bounds bounds = new Bounds(worldMatrix.MultiplyPoint((Target.prevNode as GraphxSpatialGraphDataNode).position), new Vector3(0, 0, 0));
+            bounds.Encapsulate(worldMatrix.MultiplyPoint((Target.nextNode as GraphxSpatialGraphDataNode).position));
 
             return bounds;
         }

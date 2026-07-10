@@ -4,23 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Fox.Graphx
 {
     public partial class GraphxSpatialGraphData
     {
-        public Matrix4x4 GetGraphWorldMatrix() => Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        // public Matrix4x4 GetGraphWorldMatrix() => Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
 
-        public Vector3 GetGraphWorldPosition(Vector3 pos) => GetGraphWorldMatrix().MultiplyPoint(pos);
+        // public Vector3 GetGraphWorldPosition(Vector3 pos) => GetGraphWorldMatrix().MultiplyPoint(pos);
 
+        public bool HasBounds() => nodes.Count > 0;
+        
         public Bounds GetWorldBounds()
         {
-            if (nodes.Count == 0)
-                return new Bounds(transform.position, Vector3.zero);
-
-            var matrix = GetGraphWorldMatrix();
-            var bounds = new Bounds(matrix.MultiplyPoint(nodes[0].position), Vector3.zero);
+            Matrix4x4 matrix = transform.localToWorldMatrix;
+            Bounds bounds = new Bounds(matrix.MultiplyPoint(nodes[0].position), Vector3.zero);
             for (int i = 1; i < nodes.Count; i++)
                 bounds.Encapsulate(matrix.MultiplyPoint(nodes[i].position));
 
@@ -32,7 +30,7 @@ namespace Fox.Graphx
             if (camera == null || nodes.Count == 0)
                 return true;
 
-            var planes = GeometryUtility.CalculateFrustumPlanes(camera);
+            Plane[] planes = GeometryUtility.CalculateFrustumPlanes(camera);
             return GeometryUtility.TestPlanesAABB(planes, GetWorldBounds());
         }
 
@@ -45,17 +43,17 @@ namespace Fox.Graphx
             if (nodes.Count == 0 || !IsVisibleInFrustum(Camera.current))
                 return;
 
-            Gizmos.matrix = Matrix4x4.identity;
+            Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.color = isSelected ? EditorColors.GenericSelectedColor : EditorColors.GenericUnselectedColor;
 
             if (GizmoVertexCache == null || GizmoVertexCache.Length < nodes.Count)
                 GizmoVertexCache = new Vector3[nodes.Count];
             
-            var matrix = GetGraphWorldMatrix();
             for (int i = 0; i < nodes.Count; i++)
             {
-                Vector3 vertex = matrix.MultiplyPoint(nodes[i].position);
+                Vector3 vertex = nodes[i].position;
                 GizmoVertexCache[i] = vertex;
+                
                 Gizmos.DrawWireCube(vertex, NodeGizmoScale);
             }
 
@@ -163,10 +161,7 @@ namespace Fox.Graphx
             Undo.DestroyObjectImmediate(edge.gameObject);
         }
 
-        protected virtual void ConnectEdge(
-            Fox.Graphx.GraphxSpatialGraphDataNode prev,
-            Fox.Graphx.GraphxSpatialGraphDataNode next,
-            Fox.Graphx.GraphxSpatialGraphDataEdge edge)
+        protected virtual void ConnectEdge(GraphxSpatialGraphDataNode prev, GraphxSpatialGraphDataNode next, GraphxSpatialGraphDataEdge edge)
         {
             edge.prevNode = prev;
             edge.nextNode = next;
@@ -178,16 +173,13 @@ namespace Fox.Graphx
             edge.transform.SetParent(next.transform);
         }
 
-        protected virtual void HandleSplice(
-            Fox.Graphx.GraphxSpatialGraphDataNode prev,
-            Fox.Graphx.GraphxSpatialGraphDataNode inserted,
-            Fox.Graphx.GraphxSpatialGraphDataEdge newEdge)
+        protected virtual void HandleSplice(GraphxSpatialGraphDataNode prev, GraphxSpatialGraphDataNode inserted, GraphxSpatialGraphDataEdge newEdge)
         {
             var existingEdge = edges.FirstOrDefault(e => e.prevNode == prev && e.nextNode != null && e != newEdge);
             if (existingEdge == null)
                 return;
 
-            var oldNext = existingEdge.nextNode as Fox.Graphx.GraphxSpatialGraphDataNode;
+            var oldNext = existingEdge.nextNode as GraphxSpatialGraphDataNode;
             existingEdge.prevNode = inserted;
 
             prev.outlinks.Remove(existingEdge);
@@ -219,7 +211,7 @@ namespace Fox.Graphx
             }
         }
 
-        protected Fox.Graphx.GraphxSpatialGraphDataNode CreateNode()
+        protected GraphxSpatialGraphDataNode CreateNode()
         {
             var newNodeGo = new GameObject();
             Undo.SetTransformParent(newNodeGo.transform, transform, "Set new graph node's parent");
@@ -228,7 +220,7 @@ namespace Fox.Graphx
             var nodeType = this.GetNodeType();
             var newNode = Undo.AddComponent(newNodeGo, nodeType) as Fox.Graphx.GraphxSpatialGraphDataNode;
 
-            var usedNames = UnityEngine.Object.FindObjectsByType(nodeType, FindObjectsInactive.Include, FindObjectsSortMode.None)
+            var usedNames = FindObjectsByType(nodeType, FindObjectsInactive.Include, FindObjectsSortMode.None)
                 .Select(ent => ent.name).ToHashSet();
             newNodeGo.name = newNode.GenerateUniqueName(nodeType, usedNames);
 
@@ -236,16 +228,16 @@ namespace Fox.Graphx
             return newNode;
         }
 
-        protected Fox.Graphx.GraphxSpatialGraphDataEdge CreateEdge()
+        protected GraphxSpatialGraphDataEdge CreateEdge()
         {
             var newEdgeGo = new GameObject();
             Undo.SetTransformParent(newEdgeGo.transform, transform, "Set new graph edge's parent");
             Undo.RegisterCreatedObjectUndo(newEdgeGo, "Added graph edge");
 
             var edgeType = GetEdgeType();
-            var edge = Undo.AddComponent(newEdgeGo, GetEdgeType()) as Fox.Graphx.GraphxSpatialGraphDataEdge;
+            var edge = Undo.AddComponent(newEdgeGo, GetEdgeType()) as GraphxSpatialGraphDataEdge;
 
-            var usedNames = UnityEngine.Object.FindObjectsByType(edgeType, FindObjectsInactive.Include, FindObjectsSortMode.None)
+            var usedNames = FindObjectsByType(edgeType, FindObjectsInactive.Include, FindObjectsSortMode.None)
                 .Select(ent => ent.name).ToHashSet();
             edge.name = edge.GenerateUniqueName(edgeType, usedNames);
 

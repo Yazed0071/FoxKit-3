@@ -159,9 +159,8 @@ namespace Fox.GameService
         {
             // TPP: 12-byte X-negated Vector3.
             // Now it takes the GsRouteData(The parent of the Nodes) Transform of x, y, z into account.
-            Matrix4x4 routeMatrix = route.GetGraphWorldMatrix();
             foreach (var node in route.nodes)
-                writer.WritePositionF(routeMatrix.MultiplyPoint3x4(node.position));
+                writer.WritePositionF(route.transform.TransformPoint(node.position));
         }
 
         private static void WriteEvent(BinaryWriter writer, GsRouteDataEvent routeEvent)

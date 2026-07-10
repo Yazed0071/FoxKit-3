@@ -8,11 +8,11 @@ namespace Fox.EdGraphx
     [CustomEditor(typeof(GraphxSpatialGraphData), true)]
     public class GraphxSpatialGraphDataEditor : UnityEditor.Editor
     {
-        protected new GraphxSpatialGraphData target => base.target as GraphxSpatialGraphData;
+        protected new GraphxSpatialGraphData Target => (GraphxSpatialGraphData)base.target;
 
-        private bool HasFrameBounds() => target.nodes.Count > 0;
+        protected bool HasFrameBounds() => Target.HasBounds();
 
-        public Bounds OnGetFrameBounds() => target.GetWorldBounds();
+        protected Bounds OnGetFrameBounds() => Target.GetWorldBounds();
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -35,8 +35,8 @@ namespace Fox.EdGraphx
         private void OnAddNodeButtonClicked()
         {
             int undoGroup = Undo.GetCurrentGroup();
-            bool wasEmpty = target.nodes.Count == 0;
-            GraphxSpatialGraphDataNode node = target.AddNode();
+            bool wasEmpty = Target.nodes.Count == 0;
+            GraphxSpatialGraphDataNode node = Target.AddNode();
 
             if (wasEmpty && node != null)
             {
@@ -44,7 +44,7 @@ namespace Fox.EdGraphx
                 if (sceneView != null)
                 {
                     Undo.RecordObject(node, "Place First Node");
-                    node.position = target.GetGraphWorldMatrix().inverse.MultiplyPoint(sceneView.pivot);
+                    node.position = Target.transform.InverseTransformPoint(sceneView.pivot);
                 }
             }
 

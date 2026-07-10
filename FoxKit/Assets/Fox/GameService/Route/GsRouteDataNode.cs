@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 
 namespace Fox.GameService
 {
@@ -10,8 +11,7 @@ namespace Fox.GameService
         public override float GetDirection(int index)
         {
             if (index >= 0 && index < events.Count && events[index] != null)
-                throw new NotImplementedException("Need to refactor function to take quaternions.");
-                //return events[index].direction;
+                return events[index].dir.eulerAngles.y;
 
             return 0f;
         }
@@ -20,11 +20,9 @@ namespace Fox.GameService
         {
             if (index < 0 || index >= events.Count || events[index] == null)
                 return;
-
-            throw new NotImplementedException("Need to refactor function to take quaternions.");
             
             Undo.RecordObject(events[index], "Set Node Event Direction");
-            //events[index].dir = value;
+            events[index].dir = Quaternion.AngleAxis(value, Vector3.up);
         }
     }
 }
