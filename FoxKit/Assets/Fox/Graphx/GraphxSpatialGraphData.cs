@@ -50,7 +50,7 @@ namespace Fox.Graphx
                 Vector3 vertex = nodes[i].position;
                 GizmoVertexCache[i] = vertex;
                 
-                //Gizmos.DrawWireCube(vertex, NodeGizmoScale);
+                Gizmos.DrawWireCube(vertex, NodeGizmoScale);
             }
 
             Gizmos.DrawLineStrip(GizmoVertexCache, IsLoop());
