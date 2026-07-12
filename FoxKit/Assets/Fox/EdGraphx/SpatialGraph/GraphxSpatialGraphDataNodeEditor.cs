@@ -30,16 +30,6 @@ namespace Fox.EdGraphx
         {
             if (Graph == null)
                 return;
-
-            Handles.matrix = Graph.transform.localToWorldMatrix;
-
-            EditorGUI.BeginChangeCheck();
-            Vector3 newTargetPosition = Handles.PositionHandle(Target.transform.position, Quaternion.identity);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(Target, "Move GraphxSpatialGraphDataNode");
-                Target.transform.position = newTargetPosition;
-            }
             
             DrawExtraSceneGUI();
         }
@@ -91,14 +81,13 @@ namespace Fox.EdGraphx
 
         private void OnAddNodeButtonClicked()
         {
-            var graph = Target.transform.GetComponentInParent<GraphxSpatialGraphData>();
-            if (graph == null)
+            if (Graph == null)
             {
                 Debug.LogError($"Parent GameObject is not a ${nameof(GraphxSpatialGraphData)}.");
                 return;
             }
 
-            var index = graph.IndexOf(Target);
+            var index = Graph.IndexOf(Target);
             if (index == -1)
             {
                 Debug.LogError($"Node is not assigned to parent's {nameof(GraphxSpatialGraphData.nodes)} property.");
@@ -106,52 +95,50 @@ namespace Fox.EdGraphx
             }
 
             // Create node at current position
-            var newNode = graph.AddNodeAfter(Target);
+            var newNode = Graph.AddNodeAfter(Target);
             newNode.transform.position = Target.transform.position;
             Selection.activeGameObject = newNode.gameObject;
         }
 
         private void OnDeleteNodeButtonClicked()
         {
-            var graph = Target.transform.GetComponentInParent<GraphxSpatialGraphData>();
-            if (graph == null)
+            if (Graph == null)
             {
                 Debug.LogError($"Parent GameObject is not a {nameof(GraphxSpatialGraphData)}.");
                 return;
             }
 
-            var index = graph.IndexOf(Target);
+            var index = Graph.IndexOf(Target);
             if (index == -1)
             {
                 Debug.LogError($"Node is not assigned to parent's {nameof(GraphxSpatialGraphData.nodes)} property.");
                 return;
             }
 
-            GameObject selectAfter = graph.gameObject;
-            if (graph.nodes.Count > 1)
+            GameObject selectAfter = Graph.gameObject;
+            if (Graph.nodes.Count > 1)
             {
                 int neighbourIndex;
                 if (index > 0)
                     neighbourIndex = index - 1;
                 else
                     neighbourIndex = 1;
-                selectAfter = graph.GetGraphNode(neighbourIndex).gameObject;
+                selectAfter = Graph.GetGraphNode(neighbourIndex).gameObject;
             }
 
-            graph.RemoveNode(Target);
+            Graph.RemoveNode(Target);
             Selection.activeGameObject = selectAfter;
         }
 
         private void OnNextNodeButtonClicked()
         {
-            var graph = Target.transform.GetComponentInParent<GraphxSpatialGraphData>();
-            if (graph == null)
+            if (Graph == null)
             {
                 Debug.LogError($"Parent GameObject is not a {nameof(GraphxSpatialGraphData)}.");
                 return;
             }
 
-            var index = graph.IndexOf(Target);
+            var index = Graph.IndexOf(Target);
             if (index == -1)
             {
                 Debug.LogError($"Node is not assigned to parent's {nameof(GraphxSpatialGraphData.nodes)} property.");
@@ -159,12 +146,12 @@ namespace Fox.EdGraphx
             }
 
             var nextIndex = index + 1;
-            if (nextIndex >= graph.nodes.Count)
+            if (nextIndex >= Graph.nodes.Count)
             {
                 nextIndex = 0;
             }
 
-            var nextNode = graph.GetGraphNode(nextIndex);
+            var nextNode = Graph.GetGraphNode(nextIndex);
             if (nextNode == null)
             {
                 Debug.LogError($"Next graph node is null. Did you delete a node without removing it from parent's {nameof(GraphxSpatialGraphData.nodes)} property?");
@@ -175,14 +162,13 @@ namespace Fox.EdGraphx
 
         private void OnPreviousNodeButtonClicked()
         {
-            var graph = Target.transform.GetComponentInParent<GraphxSpatialGraphData>();
-            if (graph == null)
+            if (Graph == null)
             {
                 Debug.LogError($"Parent GameObject is not a ${nameof(GraphxSpatialGraphData)}.");
                 return;
             }
 
-            var index = graph.IndexOf(Target);
+            var index = Graph.IndexOf(Target);
             if (index == -1)
             {
                 Debug.LogError($"Node is not assigned to parent's {nameof(GraphxSpatialGraphData.nodes)} property.");
@@ -192,10 +178,10 @@ namespace Fox.EdGraphx
             var nextIndex = index - 1;
             if (nextIndex < 0)
             {
-                nextIndex = graph.nodes.Count - 1;
+                nextIndex = Graph.nodes.Count - 1;
             }
 
-            var nextNode = graph.GetGraphNode(nextIndex);
+            var nextNode = Graph.GetGraphNode(nextIndex);
             if (nextNode == null)
             {
                 Debug.LogError($"Previous graph node is null. Did you delete a node without removing it from parent's {nameof(GraphxSpatialGraphData.nodes)} property?");
@@ -206,14 +192,13 @@ namespace Fox.EdGraphx
 
         private void OnGraphButtonClicked()
         {
-            var graph = Target.transform.GetComponentInParent<GraphxSpatialGraphData>();
-            if (graph == null)
+            if (Graph == null)
             {
                 Debug.LogError($"Parent GameObject is not a ${nameof(GraphxSpatialGraphData)}.");
                 return;
             }
 
-            Selection.activeGameObject = graph.gameObject;
+            Selection.activeGameObject = Graph.gameObject;
         }
     }
 }

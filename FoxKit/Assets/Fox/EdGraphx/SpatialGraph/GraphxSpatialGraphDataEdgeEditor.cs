@@ -16,7 +16,7 @@ namespace Fox.EdGraphx
         protected Bounds OnGetFrameBounds()
         {
             Bounds bounds = new Bounds(Target.prevNode.transform.position, new Vector3(0, 0, 0));
-            bounds.Encapsulate(Target.prevNode.transform.position);
+            bounds.Encapsulate(Target.nextNode.transform.position);
 
             return bounds;
         }

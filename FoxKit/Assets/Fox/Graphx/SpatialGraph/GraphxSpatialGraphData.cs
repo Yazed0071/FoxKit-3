@@ -52,7 +52,7 @@ namespace Fox.Graphx
                 Gizmos.DrawWireCube(vertex, NodeGizmoScale);
             }
 
-            Gizmos.DrawLineStrip(GizmoVertexCache, IsLoop());
+            Gizmos.DrawLineStrip(GizmoVertexCache[..nodes.Count], IsLoop());
         }
 
         public void OnDrawGizmos() => DrawGizmos(false);
