@@ -8,3 +8,6 @@
 !Assets/tpp/toolbox/Config
 !Assets/tpp/toolbox/Config.meta
 !Assets/tpp/toolbox/Config/**
+!Assets/tpp/toolbox/Config/Route
+!Assets/tpp/toolbox/Config/Route.meta
+!Assets/tpp/toolbox/Config/Route/**

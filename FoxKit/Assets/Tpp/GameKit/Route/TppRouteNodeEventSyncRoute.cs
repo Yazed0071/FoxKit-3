@@ -12,7 +12,7 @@ namespace Tpp.GameKit
 		{
 			base.OnDeserializeEntity(logger);
 			
-			GameServiceModule.RouteIdMap.Resolve(HashingBitConverter.ToStrCode32(extensions[0]), out string resolvedId);
+			GameKitModule.SyncRouteIdMap.Resolve(HashingBitConverter.ToStrCode32(extensions[0]), out string resolvedId);
 			syncTableId = resolvedId;
 			
 			step = unchecked((int)extensions[1]);

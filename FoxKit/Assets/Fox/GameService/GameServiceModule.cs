@@ -49,10 +49,11 @@ namespace Fox.GameService
                 string[] lineData = eventInfo[i].Split(',');
 
                 string id = lineData[0];
+                
                 StrCode32 idHash = new StrCode32(lineData[1]);
 
                 bool include = false;
-                string[] testedInTitles = lineData[5].Split(',');
+                string[] testedInTitles = lineData[5].Split(';');
                 foreach (string testedTitle in testedInTitles)
                 {
                     if (testedTitle == title)
