@@ -23,6 +23,8 @@ namespace Fox.EdGameService
             for (int i = 0; i < Target.events.Count; i++)
             {
                 GsRouteDataNodeEvent @event = Target.events[i];
+                if (@event == null)
+                    continue;
                 
                 Quaternion dir = @event.dir;
 
