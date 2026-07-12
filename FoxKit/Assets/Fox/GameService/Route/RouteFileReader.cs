@@ -41,7 +41,7 @@ namespace Fox.GameService
                     RouteFile.HeaderV2* header = (RouteFile.HeaderV2*)dataPtr;
 
                     routeCount = header->RouteCount;
-                    origin = Math.FoxToUnityVector3(header->Origin);
+                    origin = header->Origin;
                     routeIds = (StrCode32*)(dataPtr + header->RouteIdsOffset);
                     routeDefs = (RouteFile.RouteDef*)(dataPtr + header->RouteDefinitionsOffset);
                 }
@@ -92,12 +92,12 @@ namespace Fox.GameService
                                 packedZ |= 0xFFC00000;
                             float z = (float)(int)packedZ / 1024;
 
-                            node.position = Math.FoxToUnityVector3(new Vector3(x, y, z)) + origin;
+                            node.position = new Vector3(x, y, z) + origin;
                         }
                         else
                         {
                             Vector3 vertex = ((Vector3*)((byte*)routeDef + routeDef->VerticesOffset))[j];
-                            node.position = Math.FoxToUnityVector3(vertex);
+                            node.position = vertex;
                         }
                         
                         GsRouteDataEdge edge = new GameObject($"GsRouteDataEdge{j:D4}").AddComponent<GsRouteDataEdge>();
@@ -166,7 +166,7 @@ namespace Fox.GameService
                                     GsRouteDataEventAimStaticPoint aimStaticPoint = new GameObject().AddComponent<GsRouteDataEventAimStaticPoint>();
                                     
                                     Vector3 position = *(Vector3*)aimPointData;
-                                    aimStaticPoint.position = Math.FoxToUnityVector3(position);
+                                    aimStaticPoint.position = position;
                                     
                                     aimPoint = aimStaticPoint;
                                     break;
@@ -186,10 +186,16 @@ namespace Fox.GameService
                                     GsRouteDataEventAimRouteAsSightMovePath aimRouteAsSightMovePath = new GameObject().AddComponent<GsRouteDataEventAimRouteAsSightMovePath>();
                                     
                                     StrCode32* aimPointRouteIds = (StrCode32*)aimPointData;
-                                    aimRouteAsSightMovePath.routeId_AddElement(0, aimPointRouteIds[0].ToString());
-                                    aimRouteAsSightMovePath.routeId_AddElement(1, aimPointRouteIds[1].ToString());
-                                    aimRouteAsSightMovePath.routeId_AddElement(2, aimPointRouteIds[2].ToString());
-                                    aimRouteAsSightMovePath.routeId_AddElement(3, aimPointRouteIds[3].ToString());
+
+                                    string resolvedRouteId;
+                                    GameServiceModule.RouteIdMap.Resolve(aimPointRouteIds[0], out resolvedRouteId);
+                                    aimRouteAsSightMovePath.routeId_AddElement(0, resolvedRouteId);
+                                    GameServiceModule.RouteIdMap.Resolve(aimPointRouteIds[1], out resolvedRouteId);
+                                    aimRouteAsSightMovePath.routeId_AddElement(1, resolvedRouteId);
+                                    GameServiceModule.RouteIdMap.Resolve(aimPointRouteIds[2], out resolvedRouteId);
+                                    aimRouteAsSightMovePath.routeId_AddElement(2, resolvedRouteId);
+                                    GameServiceModule.RouteIdMap.Resolve(aimPointRouteIds[3], out resolvedRouteId);
+                                    aimRouteAsSightMovePath.routeId_AddElement(3, resolvedRouteId);
 
                                     aimPoint = aimRouteAsSightMovePath;
                                     break;
@@ -199,10 +205,16 @@ namespace Fox.GameService
                                     GsRouteDataEventAimRouteAsObject aimRouteAsObject = new GameObject().AddComponent<GsRouteDataEventAimRouteAsObject>();
                                     
                                     StrCode32* aimPointRouteIds = (StrCode32*)aimPointData;
-                                    aimRouteAsObject.routeId_AddElement(0, aimPointRouteIds[0].ToString());
-                                    aimRouteAsObject.routeId_AddElement(1, aimPointRouteIds[1].ToString());
-                                    aimRouteAsObject.routeId_AddElement(2, aimPointRouteIds[2].ToString());
-                                    aimRouteAsObject.routeId_AddElement(3, aimPointRouteIds[3].ToString());
+
+                                    string resolvedRouteId;
+                                    GameServiceModule.RouteIdMap.Resolve(aimPointRouteIds[0], out resolvedRouteId);
+                                    aimRouteAsObject.routeId_AddElement(0, resolvedRouteId);
+                                    GameServiceModule.RouteIdMap.Resolve(aimPointRouteIds[1], out resolvedRouteId);
+                                    aimRouteAsObject.routeId_AddElement(1, resolvedRouteId);
+                                    GameServiceModule.RouteIdMap.Resolve(aimPointRouteIds[2], out resolvedRouteId);
+                                    aimRouteAsObject.routeId_AddElement(2, resolvedRouteId);
+                                    GameServiceModule.RouteIdMap.Resolve(aimPointRouteIds[3], out resolvedRouteId);
+                                    aimRouteAsObject.routeId_AddElement(3, resolvedRouteId);
                                     
                                     aimPoint = aimRouteAsObject;
                                     break;
@@ -256,6 +268,8 @@ namespace Fox.GameService
                     {
                         foreach (GsRouteDataNodeEvent nodeEvent in node.events)
                         {
+                            nodeEvent.aimPoint?.OnDeserializeEntity(logger);
+                            
                             nodeEvent.OnDeserializeEntity(logger);
                         }
                         
@@ -264,7 +278,9 @@ namespace Fox.GameService
                     
                     foreach (GsRouteDataEdge edge in route.edges)
                     {
-                        edge.@event.OnDeserializeEntity(logger);
+                        edge.@event?.aimPoint?.OnDeserializeEntity(logger);
+                        
+                        edge.@event?.OnDeserializeEntity(logger);
                         
                         edge.OnDeserializeEntity(logger);
                     }

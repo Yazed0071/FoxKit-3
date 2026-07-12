@@ -91,8 +91,8 @@ namespace Fox.GameService
             
             public Quaternion Dir
             {
-                get => Math.FoxToUnityQuaternion(Quaternion.AngleAxis(EncodedDir * DIR_DECODE, Math.UnityToFoxVector3(Vector3.up)));
-                set => EncodedDir = (ushort)(Math.UnityToFoxQuaternion(value).eulerAngles.y * DIR_ENCODE);
+                get => Quaternion.AngleAxis(EncodedDir * DIR_DECODE, Math.UnityToFoxVector3(Vector3.up));
+                set => EncodedDir = (ushort)(value.eulerAngles.y * DIR_ENCODE);
             }
 
             public float Time

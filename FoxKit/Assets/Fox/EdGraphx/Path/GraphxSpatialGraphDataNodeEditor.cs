@@ -14,7 +14,7 @@ namespace Fox.EdGraphx
 
         protected bool HasFrameBounds() => Graph != null;
 
-        protected Bounds OnGetFrameBounds() => new Bounds(Graph.transform.TransformPoint(Target.position), new Vector3(1, 1, 1));
+        protected Bounds OnGetFrameBounds() => new Bounds(Target.transform.position, new Vector3(1, 1, 1));
 
         private void OnEnable()
         {
@@ -34,11 +34,11 @@ namespace Fox.EdGraphx
             Handles.matrix = Graph.transform.localToWorldMatrix;
 
             EditorGUI.BeginChangeCheck();
-            Vector3 newTargetPosition = Handles.PositionHandle(Target.position, Quaternion.identity);
+            Vector3 newTargetPosition = Handles.PositionHandle(Target.transform.position, Quaternion.identity);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(Target, "Move GraphxSpatialGraphDataNode");
-                Target.position = newTargetPosition;
+                Target.transform.position = newTargetPosition;
             }
             
             DrawExtraSceneGUI();
@@ -107,7 +107,7 @@ namespace Fox.EdGraphx
 
             // Create node at current position
             var newNode = graph.AddNodeAfter(Target);
-            newNode.position = Target.position;
+            newNode.transform.position = Target.transform.position;
             Selection.activeGameObject = newNode.gameObject;
         }
 

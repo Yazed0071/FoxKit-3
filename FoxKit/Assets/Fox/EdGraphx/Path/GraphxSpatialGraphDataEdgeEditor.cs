@@ -15,10 +15,8 @@ namespace Fox.EdGraphx
 
         protected Bounds OnGetFrameBounds()
         {
-            Matrix4x4 worldMatrix = Graph.transform.worldToLocalMatrix;
-
-            Bounds bounds = new Bounds(worldMatrix.MultiplyPoint((Target.prevNode as GraphxSpatialGraphDataNode).position), new Vector3(0, 0, 0));
-            bounds.Encapsulate(worldMatrix.MultiplyPoint((Target.nextNode as GraphxSpatialGraphDataNode).position));
+            Bounds bounds = new Bounds(Target.prevNode.transform.position, new Vector3(0, 0, 0));
+            bounds.Encapsulate(Target.prevNode.transform.position);
 
             return bounds;
         }

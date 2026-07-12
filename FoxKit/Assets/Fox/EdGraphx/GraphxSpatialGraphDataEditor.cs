@@ -40,11 +40,10 @@ namespace Fox.EdGraphx
 
             if (wasEmpty && node != null)
             {
-                var sceneView = SceneView.lastActiveSceneView;
-                if (sceneView != null)
+                if (HandleUtility.PlaceObject(Event.current.mousePosition, out Vector3 placedPosition, out _))
                 {
                     Undo.RecordObject(node, "Place First Node");
-                    node.position = Target.transform.InverseTransformPoint(sceneView.pivot);
+                    node.transform.position = placedPosition;
                 }
             }
 

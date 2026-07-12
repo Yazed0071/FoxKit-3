@@ -9,7 +9,7 @@ namespace Fox.EdGameService
     [CustomEditor(typeof(GsRouteDataNode))]
     public class GsRouteDataNodeEditor : GraphxSpatialGraphDataNodeEditor
     {
-        private new GsRouteDataNode Target => (GsRouteDataNode)target;
+        private GsRouteDataNode Target => (GsRouteDataNode)target;
 
         // private const float DirectionHandleBaseSize = 0.8f;
         private const float DirectionHandleRate = 0.2f;
@@ -18,7 +18,7 @@ namespace Fox.EdGameService
         {
             base.DrawExtraSceneGUI();
             
-            Vector3 nodePosition = Target.position;
+            Vector3 nodePosition = Target.transform.position;
 
             for (int i = 0; i < Target.events.Count; i++)
             {

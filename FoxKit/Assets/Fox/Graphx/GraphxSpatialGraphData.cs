@@ -13,10 +13,9 @@ namespace Fox.Graphx
         
         public Bounds GetWorldBounds()
         {
-            Matrix4x4 matrix = transform.localToWorldMatrix;
-            Bounds bounds = new Bounds(matrix.MultiplyPoint(nodes[0].position), Vector3.zero);
+            Bounds bounds = new Bounds(nodes[0].transform.position, Vector3.zero);
             for (int i = 1; i < nodes.Count; i++)
-                bounds.Encapsulate(matrix.MultiplyPoint(nodes[i].position));
+                bounds.Encapsulate(nodes[i].transform.position);
 
             return bounds;
         }
@@ -47,7 +46,7 @@ namespace Fox.Graphx
             
             for (int i = 0; i < nodes.Count; i++)
             {
-                Vector3 vertex = nodes[i].position;
+                Vector3 vertex = nodes[i].transform.localPosition;
                 GizmoVertexCache[i] = vertex;
                 
                 Gizmos.DrawWireCube(vertex, NodeGizmoScale);
