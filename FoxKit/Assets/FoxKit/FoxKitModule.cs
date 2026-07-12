@@ -17,18 +17,12 @@ namespace FoxKit
 
         public override void Init()
         {
-            FsModule.UnityBasePath = SettingsManager.UnityBasePath;
-            FsModule.ExternalBasePath = SettingsManager.ExternalBasePath;
-            FsModule.LooseBasePath = SettingsManager.LooseBasePath;
-
             RegisterDictionaries();
         }
 
         private static void RegisterDictionaries()
         {
-            GameServiceModule.RegisterIdMaps("/Assets/tpp/toolbox/Config/route_ids", "/Assets/tpp/toolbox/Config/event_ids");
-            
-            GameServiceModule.RegisterEventInfo("/Assets/tpp/toolbox/Config/EventInfo.csv", "tpp");
+            GameServiceModule.RouteIdMap.RegisterDictionary("/Assets/tpp/toolbox/Config/route_ids");
         }
     }
 }

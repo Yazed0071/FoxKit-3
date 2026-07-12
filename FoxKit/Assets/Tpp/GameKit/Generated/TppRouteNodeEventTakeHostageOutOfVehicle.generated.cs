@@ -22,9 +22,6 @@ namespace Tpp.GameKit
 		[field: UnityEngine.SerializeField]
 		public string message { get; set; }
 		
-		[field: UnityEngine.SerializeField]
-		public string routeId { get; set; }
-		
 		// ClassInfos
 		public static new bool ClassInfoInitialized = false;
 		private static Fox.Core.EntityInfo classInfo;
@@ -43,9 +40,8 @@ namespace Tpp.GameKit
 		{
 			if (Fox.GameService.GsRouteDataNodeEvent.ClassInfoInitialized)
 				classInfo = new Fox.Core.EntityInfo("TppRouteNodeEventTakeHostageOutOfVehicle", typeof(TppRouteNodeEventTakeHostageOutOfVehicle), Fox.GameService.GsRouteDataNodeEvent.ClassInfo, 0, null, 0);
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("unknown", Fox.Core.PropertyInfo.PropertyType.UInt32, 136, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("message", Fox.Core.PropertyInfo.PropertyType.String, 140, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("routeId", Fox.Core.PropertyInfo.PropertyType.String, 148, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
+			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("unknown", Fox.Core.PropertyInfo.PropertyType.UInt32, 112, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
+			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("message", Fox.Core.PropertyInfo.PropertyType.String, 116, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
 
 			ClassInfoInitialized = true;
 		}
@@ -58,8 +54,6 @@ namespace Tpp.GameKit
 					return new Fox.Core.Value(unknown);
 				case "message":
 					return new Fox.Core.Value(message);
-				case "routeId":
-					return new Fox.Core.Value(routeId);
 				default:
 					return base.GetProperty(propertyName);
 			}
@@ -92,9 +86,6 @@ namespace Tpp.GameKit
 					return;
 				case "message":
 					this.message = value.GetValueAsString();
-					return;
-				case "routeId":
-					this.routeId = value.GetValueAsString();
 					return;
 				default:
 					base.SetProperty(propertyName, value);

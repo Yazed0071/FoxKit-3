@@ -11,9 +11,7 @@ namespace Fox.GameService
 {
     public class RouteFileReader
     {
-        private readonly TaskLogger Logger = new TaskLogger("ImportRouteFile");
-
-        public unsafe UnityEngine.SceneManagement.Scene? Read(ReadOnlySpan<byte> data)
+        public unsafe UnityEngine.SceneManagement.Scene? Read(ReadOnlySpan<byte> data, TaskLogger logger)
         {
             fixed (byte* dataPtr = data)
             {
@@ -21,14 +19,14 @@ namespace Fox.GameService
 
                 if (baseHeader->Signature != RouteFile.Signature)
                 {
-                    Logger.AddError($"Read failed. Not a ROUT.");
+                    logger.AddError($"Read failed. Not a ROUT.");
                     return null;
                 }
 
                 RouteFile.FormatVersion version = (RouteFile.FormatVersion)baseHeader->Version;
                 if (version != RouteFile.FormatVersion.V2 && version != RouteFile.FormatVersion.V3)
                 {
-                    Logger.AddError($"Version {version} isn't supported");
+                    logger.AddError($"Version {version} isn't supported");
                     return null;
                 }
 
@@ -73,15 +71,11 @@ namespace Fox.GameService
                         GsRouteDataNode node = new GameObject($"GsRouteDataNode{j:D4}").AddComponent<GsRouteDataNode>();
                         node.SetOwner(routeData);
                         routeData.nodes.Add(node);
-                        
-                        GsRouteDataEdge edge = new GameObject($"GsRouteDataEdge{j:D4}").AddComponent<GsRouteDataEdge>();
-                        edge.SetOwner(routeData);
-                        routeData.edges.Add(edge);
 
                         // Position
                         if (version == RouteFile.FormatVersion.V2)
                         {
-                            ulong packedVertex = ((ulong*)((byte*)routeDef + routeDef->VerticesOffset))[j];
+                            ulong packedVertex = *(ulong*)((byte*)routeDef + routeDef->VerticesOffset)[j];
 
                             uint packedX = (uint)(packedVertex & 0x003FFFFF);
                             if ((packedX & (1 << 21)) != 0)
@@ -105,23 +99,65 @@ namespace Fox.GameService
                             Vector3 vertex = ((Vector3*)((byte*)routeDef + routeDef->VerticesOffset))[j];
                             node.position = Math.FoxToUnityVector3(vertex);
                         }
+                        
+                        GsRouteDataEdge edge = new GameObject($"GsRouteDataEdge{j:D4}").AddComponent<GsRouteDataEdge>();
+                        edge.SetOwner(routeData);
+                        routeData.edges.Add(edge);
 
                         // Events
                         RouteFile.EventSpan* eventSpan = (RouteFile.EventSpan*)((byte*)routeDef + routeDef->EventSpanOffset) + j;
 
-                        for (int k = 0; k < eventSpan->Count; k++)
+                        for (ushort k = 0; k < eventSpan->Count; k++)
                         {
-                            RouteFile.EventDef* evt = (RouteFile.EventDef*)((byte*)routeDef + routeDef->EventsOffset) + (eventSpan->StartIndex + k);
-                            byte* aimPointData = (byte*)evt + (version == RouteFile.FormatVersion.V2 ? 0x0C : 0x10);
+                            RouteFile.EventDef* eventDef = (RouteFile.EventDef*)((byte*)routeDef + routeDef->EventsOffset) + (eventSpan->StartIndex + k);
 
-                            Debug.Assert(evt->BodySectionType == RouteBodySectionType.Head);
-
+                            Debug.Assert(eventDef->BodySectionType == RouteBodySectionType.Head);
                             
-                            string eventId = GameServiceModule.EventIdMap.Resolve(evt->Id, out string eventIdString) ? eventIdString : evt->Id.ToString();
-                            GameObject routeEventObject = new GameObject();
+                            string eventId = GameServiceModule.EventIdMap.Resolve(eventDef->Id, out string eventIdString) ? eventIdString : eventDef->Id.ToString();
+                            GameObject eventGameObject = new GameObject();
+                            GsRouteDataEvent @event = null;
 
+                            if (eventDef->Type == RouteEventType.Node)
+                            {
+                                GsRouteDataNodeEvent nodeEvent = (GsRouteDataNodeEvent)(GameServiceModule.RouteNodeEventTypeMap.TryGetValue(eventDef->Id, out Type eventType)
+                                    ? eventGameObject.AddComponent(eventType)
+                                    : eventGameObject.AddComponent<GsRouteDataNodeEvent>());
+
+                                nodeEvent.id = eventId;
+                                nodeEvent.isLoop = eventDef->IsLoop;
+                                nodeEvent.time = eventDef->Time;
+                                nodeEvent.dir = eventDef->Dir;
+                                
+                                node.events.Add(nodeEvent);
+                                nodeEvent.SetOwner(routeData);
+                                nodeEvent.name = nodeEvent.GenerateName(k);
+
+                                // Bit of a hack for organization - even though the GsRouteData officially owns everything, parent to node
+                                nodeEvent.transform.parent = node.transform;
+
+                                @event = nodeEvent;
+                            }
+                            else
+                            {
+                                GsRouteDataEdgeEvent edgeEvent = (GsRouteDataEdgeEvent)(GameServiceModule.RouteEdgeEventTypeMap.TryGetValue(eventDef->Id, out Type eventType)
+                                    ? eventGameObject.AddComponent(eventType)
+                                    : eventGameObject.AddComponent<GsRouteDataEdgeEvent>());
+                                
+                                edgeEvent.id = eventId;
+                                
+                                edge.@event = edgeEvent;
+                                edgeEvent.SetOwner(routeData);
+                                edgeEvent.name = edgeEvent.GenerateName(k);
+                                
+                                // Bit of a hack for organization - even though the GsRouteData officially owns everything, parent to edge
+                                edgeEvent.transform.parent = edge.transform;
+
+                                @event = edgeEvent;
+                            }
+
+                            byte* aimPointData = eventDef->GetAimPointData(version);
                             GsRouteDataEventAimPoint aimPoint = null;
-                            switch (evt->AimTargetType)
+                            switch (eventDef->AimTargetType)
                             {
                                 case RouteAimTargetType.NoTarget:
                                     break;
@@ -173,48 +209,30 @@ namespace Fox.GameService
                                 }
                             }
 
-                            if (evt->Type == RouteEventType.Edge)
+                            if (aimPoint is not null)
                             {
-                                GsRouteDataEdgeEvent edgeEvent = (GsRouteDataEdgeEvent)(GameServiceModule.RouteEdgeEventTypeMap.TryGetValue(evt->Id, out Type eventType)
-                                    ? routeEventObject.AddComponent(eventType)
-                                    : routeEventObject.AddComponent<GsRouteDataEdgeEvent>());
-                                edge.@event = edgeEvent;
-
-                                edgeEvent.move = eventId;
+                                @event.aimPoint = aimPoint;
+                                aimPoint.SetOwner(routeData);
+                                aimPoint.name = $"{aimPoint.GetClassEntityInfo().Name}";
                                 
-                                edgeEvent.transform.parent = edge.transform;
-                                edgeEvent.name = $"GsRouteDataEdgeEvent{k:D4}";
-
-                                if (aimPoint is not null)
-                                {
-                                    aimPoint.SetOwner(routeData);
-                                    edgeEvent.aimPoint = aimPoint;
-                                    aimPoint.transform.parent = edgeEvent.transform;
-                                    aimPoint.name = $"{aimPoint.GetClassEntityInfo().Name}";
-                                }
+                                // Bit of a hack for organization - even though the GsRouteData officially owns everything, parent to node/edge
+                                aimPoint.transform.parent = @event.transform;
                             }
-                            else
+                            
+                            uint* extensions = eventDef->GetExtensionData(version);
+                            @event.extensions[0] = extensions[0];
+                            @event.extensions[1] = extensions[1];
+                            @event.extensions[2] = extensions[2];
+                            @event.extensions[3] = extensions[3];
+
+#if DEBUG
+                            if (@event.GetType() == typeof(GsRouteDataNodeEvent) || @event.GetType() == typeof(GsRouteDataEdgeEvent))
                             {
-                                GsRouteDataNodeEvent nodeEvent = (GsRouteDataNodeEvent)(GameServiceModule.RouteNodeEventTypeMap.TryGetValue(evt->Id, out Type eventType)
-                                    ? routeEventObject.AddComponent(eventType)
-                                    : routeEventObject.AddComponent<GsRouteDataNodeEvent>());
-                                node.events.Add(nodeEvent);
-
-                                nodeEvent.action = eventId;
-                                nodeEvent.isLoop = evt->IsLoop;
-                                nodeEvent.time = evt->GetTime();
-                                nodeEvent.dir = evt->GetDir();
-
-                                nodeEvent.transform.parent = node.transform;
-                                nodeEvent.name = $"GsRouteDataNodeEvent{k:D4}";
-
-                                if (aimPoint is not null)
-                                {
-                                    nodeEvent.aimPoint = aimPoint;
-                                    aimPoint.SetOwner(routeData);
-                                    aimPoint.name = $"{aimPoint.GetClassEntityInfo().Name}";
-                                }
+                                if (!(@event.extensions[0] == 0 && @event.extensions[1] == 0 && @event.extensions[2] == 0 && @event.extensions[3] == 0))
+                                    //Debug.LogWarning($"Event {@event.id} in {routeData} has nonzero extensions ({@event.extensions[0]}, {@event.extensions[1]}, {@event.extensions[2]}, {@event.extensions[3]}).", @event);
+                                    logger.AddWarning($"Event {@event.id} in {routeData.name} has nonzero extensions ({@event.extensions[0]}, {@event.extensions[1]}, {@event.extensions[2]}, {@event.extensions[3]}).");
                             }
+#endif
                         }
                     }
 
@@ -229,6 +247,29 @@ namespace Fox.GameService
                         node.outlinks.Add(nextEdge);
                         nextEdge.prevNode = node;
                     }
+                }
+
+                // In the future, we'll probably want to move the importers into a general "de-converted DataSet" context that handles these calls automatically
+                foreach (GsRouteData route in routeDatas)
+                {
+                    foreach (GsRouteDataNode node in route.nodes)
+                    {
+                        foreach (GsRouteDataNodeEvent nodeEvent in node.events)
+                        {
+                            nodeEvent.OnDeserializeEntity(logger);
+                        }
+                        
+                        node.OnDeserializeEntity(logger);
+                    }
+                    
+                    foreach (GsRouteDataEdge edge in route.edges)
+                    {
+                        edge.@event.OnDeserializeEntity(logger);
+                        
+                        edge.OnDeserializeEntity(logger);
+                    }
+                    
+                    route.OnDeserializeEntity(logger);
                 }
 
                 return scene;

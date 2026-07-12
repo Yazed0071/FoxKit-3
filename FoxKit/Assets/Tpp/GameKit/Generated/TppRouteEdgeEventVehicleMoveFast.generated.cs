@@ -20,7 +20,10 @@ namespace Tpp.GameKit
 		public string railId { get; set; }
 		
 		[field: UnityEngine.SerializeField]
-		public uint rpm { get; set; }
+		public float kph { get; set; }
+		
+		[field: UnityEngine.SerializeField]
+		public uint flags { get; set; }
 		
 		// ClassInfos
 		public static new bool ClassInfoInitialized = false;
@@ -41,7 +44,8 @@ namespace Tpp.GameKit
 			if (Fox.GameService.GsRouteDataEdgeEvent.ClassInfoInitialized)
 				classInfo = new Fox.Core.EntityInfo("TppRouteEdgeEventVehicleMoveFast", typeof(TppRouteEdgeEventVehicleMoveFast), Fox.GameService.GsRouteDataEdgeEvent.ClassInfo, 0, null, 0);
 			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("railId", Fox.Core.PropertyInfo.PropertyType.String, 88, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("rpm", Fox.Core.PropertyInfo.PropertyType.UInt32, 96, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
+			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("kph", Fox.Core.PropertyInfo.PropertyType.Float, 96, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
+			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("flags", Fox.Core.PropertyInfo.PropertyType.UInt32, 100, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
 
 			ClassInfoInitialized = true;
 		}
@@ -52,8 +56,10 @@ namespace Tpp.GameKit
 			{
 				case "railId":
 					return new Fox.Core.Value(railId);
-				case "rpm":
-					return new Fox.Core.Value(rpm);
+				case "kph":
+					return new Fox.Core.Value(kph);
+				case "flags":
+					return new Fox.Core.Value(flags);
 				default:
 					return base.GetProperty(propertyName);
 			}
@@ -84,8 +90,11 @@ namespace Tpp.GameKit
 				case "railId":
 					this.railId = value.GetValueAsString();
 					return;
-				case "rpm":
-					this.rpm = value.GetValueAsUInt32();
+				case "kph":
+					this.kph = value.GetValueAsFloat();
+					return;
+				case "flags":
+					this.flags = value.GetValueAsUInt32();
 					return;
 				default:
 					base.SetProperty(propertyName, value);

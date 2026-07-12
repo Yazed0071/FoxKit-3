@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Fox.GameService
 {
-    internal static class RouteFile
+    internal static unsafe class RouteFile
     {
         public const uint Signature = 0x54554F52; // ROUT
         
@@ -57,7 +57,7 @@ namespace Fox.GameService
             public uint RouteEventTablesOffset;
             public uint RouteEventsOffset;
         }
-        
+
         [StructLayout(LayoutKind.Sequential)]
         public struct RouteDef
         {
@@ -83,15 +83,59 @@ namespace Fox.GameService
             public RouteAimTargetType AimTargetType;
             public RouteBodySectionType BodySectionType;
             public bool IsLoop;
-            public ushort Time;
-            public ushort Dir;
+            public ushort EncodedTime;
+            public ushort EncodedDir;
 
-            public float GetTime() => Time / (60f * 1000f / 1001f);
+            private const float DIR_DECODE = 2f * Mathf.PI / (UInt16.MaxValue + 1);
+            private const float DIR_ENCODE = (UInt16.MaxValue + 1) / (360f);
+            
+            public Quaternion Dir
+            {
+                get => Math.FoxToUnityQuaternion(Quaternion.AngleAxis(EncodedDir * DIR_DECODE, Math.UnityToFoxVector3(Vector3.up)));
+                set => EncodedDir = (ushort)(Math.UnityToFoxQuaternion(value).eulerAngles.y * DIR_ENCODE);
+            }
 
-            private const float DIR_TO_RAD = 2f * Mathf.PI / (UInt16.MaxValue + 1);
+            public float Time
+            {
+                get => EncodedTime / KernelModule.NTSC_RATE;
+                set => EncodedTime = (ushort)(value * KernelModule.NTSC_RATE);
+            }
 
-            public Quaternion GetDir() => Math.FoxToUnityQuaternion(Quaternion.AngleAxis(Dir * DIR_TO_RAD, Math.UnityToFoxVector3(Vector3.up)));
-            //public float GetDirRotY() => Dir * ;
+            public byte* GetAimPointData(FormatVersion version)
+            {
+                fixed (EventDef* selfPtr = &this)
+                {
+                    switch (version)
+                    {
+                        case FormatVersion.V2:
+                        case FormatVersion.V2_BE:
+                            return (byte*)selfPtr + 0x10;
+                        case FormatVersion.V3:
+                        case FormatVersion.V3_BE:
+                            return (byte*)selfPtr + 0x0C;
+                        default:
+                            return null;
+                    }
+                }
+            }
+
+            public uint* GetExtensionData(FormatVersion version)
+            {
+                fixed (EventDef* selfPtr = &this)
+                {
+                    switch (version)
+                    {
+                        case FormatVersion.V2:
+                        case FormatVersion.V2_BE:
+                            return (uint*)((byte*)selfPtr + 0x20);
+                        case FormatVersion.V3:
+                        case FormatVersion.V3_BE:
+                            return (uint*)((byte*)selfPtr + 0x1C);
+                        default:
+                            return null;
+                    }
+                }
+            }
         }
     }
 }

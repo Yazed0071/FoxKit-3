@@ -97,7 +97,7 @@ namespace Fox.EdGameService
 
             for (int i = 0; i < Target.events.Count; i++)
             {
-                string currentName = Target.events[i].action;
+                string currentName = Target.events[i].id;
 
                 int selected = GameServiceModule.RouteNodeEvents.IndexOf(currentName);
 

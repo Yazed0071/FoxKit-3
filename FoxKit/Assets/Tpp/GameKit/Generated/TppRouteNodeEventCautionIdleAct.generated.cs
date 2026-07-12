@@ -17,10 +17,7 @@ namespace Tpp.GameKit
 	{
 		// Properties
 		[field: UnityEngine.SerializeField]
-		public string animationName { get; set; }
-		
-		[field: UnityEngine.SerializeField]
-		public ushort unknown { get; set; }
+		public string action { get; set; }
 		
 		// ClassInfos
 		public static new bool ClassInfoInitialized = false;
@@ -40,8 +37,7 @@ namespace Tpp.GameKit
 		{
 			if (Fox.GameService.GsRouteDataNodeEvent.ClassInfoInitialized)
 				classInfo = new Fox.Core.EntityInfo("TppRouteNodeEventCautionIdleAct", typeof(TppRouteNodeEventCautionIdleAct), Fox.GameService.GsRouteDataNodeEvent.ClassInfo, 0, null, 0);
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("animationName", Fox.Core.PropertyInfo.PropertyType.String, 136, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("unknown", Fox.Core.PropertyInfo.PropertyType.UInt16, 144, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
+			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("action", Fox.Core.PropertyInfo.PropertyType.String, 112, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
 
 			ClassInfoInitialized = true;
 		}
@@ -50,10 +46,8 @@ namespace Tpp.GameKit
 		{
 			switch (propertyName)
 			{
-				case "animationName":
-					return new Fox.Core.Value(animationName);
-				case "unknown":
-					return new Fox.Core.Value(unknown);
+				case "action":
+					return new Fox.Core.Value(action);
 				default:
 					return base.GetProperty(propertyName);
 			}
@@ -81,11 +75,8 @@ namespace Tpp.GameKit
 		{
 			switch (propertyName)
 			{
-				case "animationName":
-					this.animationName = value.GetValueAsString();
-					return;
-				case "unknown":
-					this.unknown = value.GetValueAsUInt16();
+				case "action":
+					this.action = value.GetValueAsString();
 					return;
 				default:
 					base.SetProperty(propertyName, value);

@@ -1,16 +1,21 @@
 using Fox;
 using System;
 using System.Collections.Generic;
+using Fox.Fs;
 using UnityEditor;
 using UnityEngine;
 
 namespace FoxKit
 {
-    public static class FoxKitFramework
+    public static class Framework
     {
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
+            FsModule.UnityBasePath = SettingsManager.UnityBasePath;
+            FsModule.ExternalBasePath = SettingsManager.ExternalBasePath;
+            FsModule.LooseBasePath = SettingsManager.LooseBasePath;
+            
             // TEMP: Get list from TypeCache
             List<Module> modules = new();
             foreach (Type type in TypeCache.GetTypesDerivedFrom<Module>())

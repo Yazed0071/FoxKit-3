@@ -16,8 +16,8 @@ namespace Fox.GameService
         public static readonly List<string> RouteEdgeEvents = new();
         public static readonly List<string> RouteNodeEvents = new();
 
-        internal static StringId32Map RouteIdMap = null;
-        internal static StringId32Map EventIdMap = null;
+        public static readonly StringId32Map RouteIdMap = new StringId32Map();
+        public static readonly StringId32Map EventIdMap = new StringId32Map();
 
         public GameServiceModule() : base("Fox.GameService")
         {
@@ -36,12 +36,6 @@ namespace Fox.GameService
         public static void RegisterRouteEdgeEventTypeOverride(StrCode32 id, Type type)
         {
             Debug.Assert(RouteEdgeEventTypeMap.TryAdd(id, type));
-        }
-
-        public static void RegisterIdMaps(string routeIdDictionaryPath, string eventIdDictionaryPath)
-        {
-            RouteIdMap = new StringId32Map(routeIdDictionaryPath);
-            EventIdMap = new StringId32Map(eventIdDictionaryPath);
         }
 
         public static void RegisterEventInfo(string eventInfoPath, string title)
@@ -78,7 +72,7 @@ namespace Fox.GameService
                     RouteEdgeEvents.Add(id);
             }
 
-            EventIdMap.AddBaseEntries(eventIds);
+            EventIdMap.RegisterBaseEntries(eventIds);
         }
     }
 }

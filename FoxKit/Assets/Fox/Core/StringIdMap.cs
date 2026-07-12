@@ -8,13 +8,21 @@ namespace Fox
 {
     public class StringIdMap
     {
-        private readonly string UserDictionaryPath;
+        private string UserDictionaryPath = null;
 
-        private Dictionary<StrCode, string> Map = new Dictionary<StrCode, string>();
-        private Dictionary<StrCode, string> AddQueue = new Dictionary<StrCode, string>();
+        private Dictionary<StrCode, string> Map;
+        private Dictionary<StrCode, string> AddQueue = null;
 
-        public StringIdMap(string dictionaryPath)
+        public StringIdMap()
         {
+            Map = new Dictionary<StrCode, string>();
+        }
+
+        public void RegisterDictionary(string dictionaryPath)
+        {
+            if (dictionaryPath == null)
+                return;
+            
             string baseDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".stringdb");
             string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".ustringdb");
             
@@ -44,6 +52,8 @@ namespace Fox
 
             using (StreamReader userDictionaryReadStream = new StreamReader(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(UserDictionaryPath), System.Text.Encoding.ASCII))
             {
+                AddQueue = new Dictionary<StrCode, string>();
+                
                 while (userDictionaryReadStream.ReadLine() is { } entry)
                 {
                     string[] pair = entry.Split("\t");
@@ -62,29 +72,36 @@ namespace Fox
             }
         }
 
-        public void AddBaseEntries(List<(StrCode, string)> baseEntries)
+        public void RegisterBaseEntries(List<(StrCode, string)> baseEntries)
         {
             foreach ((StrCode hash, string value) in baseEntries)
                 if (!TryAddToMap(Map, hash, value))
-                    if (!TryAddToMap(Map, hash, value))
-                        Debug.LogWarning($"StringIdMap: load entry {(hash, value)} already provided.");
+                    Debug.LogWarning($"StringIdMap: load entry {(hash, value)} already provided.");
         }
 
         public bool Resolve(StrCode hash, out string value) => Map.TryGetValue(hash, out value);
 
-        public void Add(string value)
+        public bool Add(string value)
         {
+            if (AddQueue == null)
+                return false;
+            
             if (string.IsNullOrWhiteSpace(value))
-                return;
+                return false;
 
             StrCode hash = new StrCode(value);
 
-            if (!TryAddToMap(AddQueue, hash, value))
+            if (TryAddToMap(AddQueue, hash, value))
                 TryAddToMap(Map, hash, value);
+
+            return true;
         }
 
         public void Save()
         {
+            if (AddQueue == null)
+                return;
+            
             using StreamWriter userDictionaryWriteStream = new StreamWriter(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(UserDictionaryPath), append: true, System.Text.Encoding.ASCII);
             foreach ((StrCode hash, string value) in AddQueue)
             {
@@ -96,6 +113,10 @@ namespace Fox
         {
             if (!map.TryAdd(hash, value))
             {
+                return true;
+            }
+            else
+            {
 #if DEBUG
                 if (!map.TryGetValue(hash, out string testValue) || testValue != value)
                 {
@@ -104,22 +125,26 @@ namespace Fox
 #endif
                 return false;
             }
-            else
-            {
-                return true;
-            }
         }
     }
 
     public class StringId32Map
     {
-        private readonly string UserDictionaryPath;
+        private string UserDictionaryPath = null;
 
-        private Dictionary<StrCode32, string> Map = new Dictionary<StrCode32, string>();
-        private Dictionary<StrCode32, string> AddQueue = new Dictionary<StrCode32, string>();
+        private Dictionary<StrCode32, string> Map;
+        private Dictionary<StrCode32, string> AddQueue = null;
 
-        public StringId32Map(string dictionaryPath)
+        public StringId32Map()
         {
+            Map = new Dictionary<StrCode32, string>();
+        }
+
+        public void RegisterDictionary(string dictionaryPath)
+        {
+            if (dictionaryPath == null)
+                return;
+            
             string baseDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".stringdb");
             string userDictionaryPath = System.IO.Path.ChangeExtension(dictionaryPath, ".ustringdb");
             
@@ -147,6 +172,8 @@ namespace Fox
 
             using (StreamReader userDictionaryReadStream = new StreamReader(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(UserDictionaryPath), System.Text.Encoding.ASCII))
             {
+                AddQueue = new Dictionary<StrCode32, string>();
+                
                 while (userDictionaryReadStream.ReadLine() is { } entry)
                 {
                     string[] pair = entry.Split("\t");
@@ -165,29 +192,36 @@ namespace Fox
             }
         }
 
-        public void AddBaseEntries(List<(StrCode32, string)> baseEntries)
+        public void RegisterBaseEntries(List<(StrCode32, string)> baseEntries)
         {
             foreach ((StrCode32 hash, string value) in baseEntries)
                 if (!TryAddToMap(Map, hash, value))
-                    if (!TryAddToMap(Map, hash, value))
-                        Debug.LogWarning($"StringId32Map: load entry {(hash, value)} already provided.");
+                    Debug.LogWarning($"StringId32Map: load entry {(hash, value)} already provided.");
         }
 
         public bool Resolve(StrCode32 hash, out string value) => Map.TryGetValue(hash, out value);
 
-        public void Add(string value)
+        public bool Add(string value)
         {
+            if (AddQueue == null)
+                return false;
+            
             if (string.IsNullOrWhiteSpace(value))
-                return;
+                return false;
 
             StrCode32 hash = new StrCode32(value);
 
-            if (!TryAddToMap(AddQueue, hash, value))
+            if (TryAddToMap(AddQueue, hash, value))
                 TryAddToMap(Map, hash, value);
+
+            return true;
         }
 
         public void Save()
         {
+            if (AddQueue == null)
+                return;
+            
             using StreamWriter userDictionaryWriteStream = new StreamWriter(Fox.Fs.FileSystem.GetUnityPathFromFoxPath(UserDictionaryPath), append: true, System.Text.Encoding.ASCII);
             foreach ((StrCode32 hash, string value) in AddQueue)
             {
@@ -197,7 +231,11 @@ namespace Fox
 
         private static bool TryAddToMap(Dictionary<StrCode32, string> map, StrCode32 hash, string value)
         {
-            if (!map.TryAdd(hash, value))
+            if (map.TryAdd(hash, value))
+            {
+                return true;
+            }
+            else
             {
 #if DEBUG
                 if (!map.TryGetValue(hash, out string testValue) || testValue != value)
@@ -206,10 +244,6 @@ namespace Fox
                 }
 #endif
                 return false;
-            }
-            else
-            {
-                return true;
             }
         }
     }

@@ -12,9 +12,13 @@ namespace Tpp.GameKit
             Instance = this;
             AddDependencyModule("Fox.GameService");
         }
+        
+        public static readonly StringId32Map SwitchRouteConditionIdMap = new StringId32Map();
 
         public override void Init()
         {
+            GameServiceModule.RegisterEventInfo("/Assets/tpp/toolbox/Config/EventInfo.csv", "tpp");
+            
             GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("SendMessage"), typeof(TppRouteNodeEventSendMessage));
             GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("SwitchRoute"), typeof(TppRouteNodeEventSwitchRoute));
             GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("SyncRoute"), typeof(TppRouteNodeEventSyncRoute));
@@ -32,6 +36,10 @@ namespace Tpp.GameKit
             GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleBackNormal"), typeof(TppRouteEdgeEventVehicleBackNormal));
             GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleBackFast"), typeof(TppRouteEdgeEventVehicleBackFast));
             GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("VehicleKmPerHour"), typeof(TppRouteEdgeEventVehicleKmPerHour));
+            
+            GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("chase"), typeof(TppRouteEdgeEventChase));
+            
+            SwitchRouteConditionIdMap.RegisterDictionary("/Assets/tpp/toolbox/Config/route_switch_condition_ids");
         }
     }
 }

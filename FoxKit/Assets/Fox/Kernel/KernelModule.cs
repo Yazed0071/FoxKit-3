@@ -8,5 +8,7 @@
 		{
 			Instance = this;
 		}
+
+		public const float NTSC_RATE = 60f * 1000f / 1001f;
 	}
 }

@@ -9,9 +9,13 @@ namespace Fox.Geo
     {
         public static GeoModule Instance { get; private set; }
 
+        // GEOM
         internal static Dictionary<GeoPrimType, Func<GeomHeaderContext, TransformData>> GeoPrimDeserializationMap = new();
 
+        // RAIL
         public static readonly string[] RailNoteNames = new string[15];
+
+        public static readonly StringId32Map RailIdMap = new StringId32Map();
 
         public GeoModule() : base("Fox.Geo")
         {

@@ -15,11 +15,6 @@ namespace Fox.GameService
 	[UnityEditor.InitializeOnLoad, UnityEngine.AddComponentMenu("GameService/GsRouteDataEdgeEvent")]
 	public partial class GsRouteDataEdgeEvent : Fox.GameService.GsRouteDataEvent
 	{
-		// Properties
-		public string move { get => move_Get(); set => move_Set(value); }
-		private partial string move_Get();
-		private partial void move_Set(string value);
-		
 		// ClassInfos
 		public static new bool ClassInfoInitialized = false;
 		private static Fox.Core.EntityInfo classInfo;
@@ -38,7 +33,6 @@ namespace Fox.GameService
 		{
 			if (Fox.GameService.GsRouteDataEvent.ClassInfoInitialized)
 				classInfo = new Fox.Core.EntityInfo("GsRouteDataEdgeEvent", typeof(GsRouteDataEdgeEvent), Fox.GameService.GsRouteDataEvent.ClassInfo, 0, null, 1);
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("move", Fox.Core.PropertyInfo.PropertyType.String, 0, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Accessor));
 
 			ClassInfoInitialized = true;
 		}
@@ -47,8 +41,6 @@ namespace Fox.GameService
 		{
 			switch (propertyName)
 			{
-				case "move":
-					return new Fox.Core.Value(move);
 				default:
 					return base.GetProperty(propertyName);
 			}
@@ -76,9 +68,6 @@ namespace Fox.GameService
 		{
 			switch (propertyName)
 			{
-				case "move":
-					this.move = value.GetValueAsString();
-					return;
 				default:
 					base.SetProperty(propertyName, value);
 					return;

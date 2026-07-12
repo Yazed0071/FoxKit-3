@@ -8,9 +8,7 @@ namespace Fox.Geo
 {
     public class RailFileReader
     {
-        private readonly TaskLogger Logger = new TaskLogger("ImportRailFile");
-
-        public unsafe UnityEngine.SceneManagement.Scene? Read(ReadOnlySpan<byte> data)
+        public unsafe UnityEngine.SceneManagement.Scene? Read(ReadOnlySpan<byte> data, TaskLogger logger)
         {
             fixed (byte* dataPtr = data)
             {
@@ -18,13 +16,13 @@ namespace Fox.Geo
 
                 if (header->Signature != RailFile.Signature)
                 {
-                    Logger.AddError($"Read failed. Not a RAIL.");
+                    logger.AddError($"Read failed. Not a RAIL.");
                     return null;
                 }
 
                 if (header->Version != RailFile.FormatVersion.V2)
                 {
-                    Logger.AddError($"Version {header->Version} isn't supported");
+                    logger.AddError($"Version {header->Version} isn't supported");
                     return null;
                 }
 

@@ -114,19 +114,7 @@
     "name": "GsRouteDataEdgeEvent",
     "namespace": "GameService",
     "parent": "GsRouteDataEvent",
-    "properties": [
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
-        "exportFlag": "RW",
-        "name": "move",
-        "offset": 0,
-        "ptrType": null,
-        "size": 8,
-        "type": "String"
-      }
-    ],
+    "properties": [],
     "version": 1
   },
   {
@@ -141,31 +129,9 @@
         "arraySize": 1,
         "container": "StaticArray",
         "enum": null,
-        "exportFlag": "RW",
-        "name": "action",
-        "offset": 0,
-        "ptrType": null,
-        "size": 8,
-        "type": "String"
-      },
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
         "exportFlag": "rw",
         "name": "isLoop",
         "offset": 88,
-        "ptrType": null,
-        "size": 1,
-        "type": "bool"
-      },
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
-        "exportFlag": "rw",
-        "name": "isActionCount",
-        "offset": 89,
         "ptrType": null,
         "size": 1,
         "type": "bool"
@@ -191,17 +157,6 @@
         "ptrType": null,
         "size": 16,
         "type": "Quat"
-      },
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
-        "exportFlag": "rw",
-        "name": "scriptPath",
-        "offset": 112,
-        "ptrType": null,
-        "size": 24,
-        "type": "FilePtr"
       }
     ],
     "version": 2
@@ -399,7 +354,7 @@
         "offset": 88,
         "ptrType": null,
         "size": 4,
-        "type": "int32"
+        "type": "float"
       }
     ],
     "version": 0
@@ -417,8 +372,8 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "animationName",
-        "offset": 136,
+        "name": "action",
+        "offset": 112,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -428,11 +383,22 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "unknown",
-        "offset": 144,
+        "name": "angleA",
+        "offset": 120,
         "ptrType": null,
-        "size": 2,
-        "type": "uint16"
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "angleB",
+        "offset": 124,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
       }
     ],
     "version": 0
@@ -450,22 +416,11 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "animationName",
-        "offset": 136,
+        "name": "action",
+        "offset": 112,
         "ptrType": null,
         "size": 8,
         "type": "String"
-      },
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
-        "exportFlag": "RW",
-        "name": "unknown",
-        "offset": 144,
-        "ptrType": null,
-        "size": 2,
-        "type": "uint16"
       }
     ],
     "version": 0
@@ -484,7 +439,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "conversationLabel",
-        "offset": 136,
+        "offset": 112,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -495,7 +450,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "friendCharacterId",
-        "offset": 144,
+        "offset": 120,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -506,7 +461,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "range",
-        "offset": 152,
+        "offset": 128,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -528,7 +483,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "unknown",
-        "offset": 136,
+        "offset": 112,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -539,7 +494,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "message",
-        "offset": 140,
+        "offset": 116,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -550,7 +505,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "routeId",
-        "offset": 148,
+        "offset": 124,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -572,7 +527,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "routeId",
-        "offset": 136,
+        "offset": 112,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -582,8 +537,8 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "function",
-        "offset": 144,
+        "name": "condition",
+        "offset": 120,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -593,8 +548,8 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "argument",
-        "offset": 152,
+        "name": "gimmickId",
+        "offset": 128,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -616,7 +571,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "syncTableId",
-        "offset": 136,
+        "offset": 112,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -627,7 +582,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "step",
-        "offset": 144,
+        "offset": 120,
         "ptrType": null,
         "size": 4,
         "type": "int32"
@@ -649,7 +604,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "unknown",
-        "offset": 136,
+        "offset": 112,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -660,18 +615,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "message",
-        "offset": 140,
-        "ptrType": null,
-        "size": 8,
-        "type": "String"
-      },
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
-        "exportFlag": "RW",
-        "name": "routeId",
-        "offset": 148,
+        "offset": 116,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -693,7 +637,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "unknown",
-        "offset": 136,
+        "offset": 112,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -704,18 +648,7 @@
         "enum": null,
         "exportFlag": "RW",
         "name": "message",
-        "offset": 140,
-        "ptrType": null,
-        "size": 8,
-        "type": "String"
-      },
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
-        "exportFlag": "RW",
-        "name": "routeId",
-        "offset": 148,
+        "offset": 116,
         "ptrType": null,
         "size": 8,
         "type": "String"
@@ -747,8 +680,19 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "rpm",
+        "name": "kph",
         "offset": 96,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "flags",
+        "offset": 100,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -780,8 +724,19 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "rpm",
+        "name": "kph",
         "offset": 96,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "flags",
+        "offset": 100,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -813,8 +768,19 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "rpm",
+        "name": "kph",
         "offset": 96,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "flags",
+        "offset": 100,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -846,8 +812,19 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "rpm",
+        "name": "kph",
         "offset": 96,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "flags",
+        "offset": 100,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -879,8 +856,19 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "rpm",
+        "name": "kph",
         "offset": 96,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "flags",
+        "offset": 100,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -912,8 +900,19 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "rpm",
+        "name": "kph",
         "offset": 96,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "flags",
+        "offset": 100,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
@@ -945,11 +944,66 @@
         "container": "StaticArray",
         "enum": null,
         "exportFlag": "RW",
-        "name": "rpm",
+        "name": "kph",
         "offset": 96,
         "ptrType": null,
         "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "flags",
+        "offset": 100,
+        "ptrType": null,
+        "size": 4,
         "type": "uint32"
+      }
+    ],
+    "version": 0
+  },
+  {
+    "category": null,
+    "functions": [],
+    "id": 0,
+    "name": "TppRouteEdgeEventChase",
+    "namespace": "TppGameKit",
+    "parent": "GsRouteDataEdgeEvent",
+    "properties": [
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "unknown0",
+        "offset": 88,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "unknown1",
+        "offset": 92,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "unknown2",
+        "offset": 96,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
       }
     ],
     "version": 0
