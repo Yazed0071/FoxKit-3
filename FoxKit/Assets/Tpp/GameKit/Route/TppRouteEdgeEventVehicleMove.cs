@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tpp.GameKit
 {
-	public partial class TppRouteEdgeEventVehicleKmPerHour
+	public partial class TppRouteEdgeEventVehicleMove
 	{
 		public override void OnDeserializeEntity(TaskLogger logger)
 		{

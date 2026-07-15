@@ -12,8 +12,8 @@ using Fox;
 
 namespace Tpp.GameKit
 {
-	[UnityEditor.InitializeOnLoad, UnityEngine.AddComponentMenu("TppGameKit/TppRouteEdgeEventVehicleBackSlow")]
-	public partial class TppRouteEdgeEventVehicleBackSlow : Fox.GameService.GsRouteDataEdgeEvent
+	[UnityEditor.InitializeOnLoad, UnityEngine.AddComponentMenu("TppGameKit/TppRouteEdgeEventVehicleMove")]
+	public partial class TppRouteEdgeEventVehicleMove : Fox.GameService.GsRouteDataEdgeEvent
 	{
 		// Properties
 		[field: UnityEngine.SerializeField]
@@ -39,10 +39,10 @@ namespace Tpp.GameKit
 		{
 			return classInfo;
 		}
-		static TppRouteEdgeEventVehicleBackSlow()
+		static TppRouteEdgeEventVehicleMove()
 		{
 			if (Fox.GameService.GsRouteDataEdgeEvent.ClassInfoInitialized)
-				classInfo = new Fox.Core.EntityInfo("TppRouteEdgeEventVehicleBackSlow", typeof(TppRouteEdgeEventVehicleBackSlow), Fox.GameService.GsRouteDataEdgeEvent.ClassInfo, 0, null, 0);
+				classInfo = new Fox.Core.EntityInfo("TppRouteEdgeEventVehicleMove", typeof(TppRouteEdgeEventVehicleMove), Fox.GameService.GsRouteDataEdgeEvent.ClassInfo, 0, null, 0);
 			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("railId", Fox.Core.PropertyInfo.PropertyType.String, 88, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
 			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("kph", Fox.Core.PropertyInfo.PropertyType.Float, 96, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
 			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("flags", Fox.Core.PropertyInfo.PropertyType.UInt32, 100, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));

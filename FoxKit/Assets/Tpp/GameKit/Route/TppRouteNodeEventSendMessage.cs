@@ -11,9 +11,7 @@ namespace Tpp.GameKit
 		{
 			base.OnDeserializeEntity(logger);
 
-			unknown = extensions[0];
-
-			message = HashingBitConverter.ToStrCode32(extensions[1]).ToString();
+			message = HashingBitConverter.ToStrCode((ulong)extensions[0] << 32 | extensions[1]).ToString();
 			
 			GameServiceModule.RouteIdMap.Resolve(HashingBitConverter.ToStrCode32(extensions[2]), out string resolvedId);
 			
