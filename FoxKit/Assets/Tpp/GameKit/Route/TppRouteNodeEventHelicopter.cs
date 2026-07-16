@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tpp.GameKit
 {
-	public partial class TppRouteEdgeEventHelicopter
+	public partial class TppRouteNodeEventHelicopter
 	{
 		public override void OnDeserializeEntity(TaskLogger logger)
 		{

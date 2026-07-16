@@ -51,7 +51,8 @@ namespace Tpp.GameKit
             // Heli
             GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("Normal"), typeof(TppRouteEdgeEventHelicopter));
             GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("PermitGettingOff"), typeof(TppRouteEdgeEventHelicopter));
-            // GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("Hovering"), typeof(TppRouteEdgeEventHelicopter));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("Hovering"), typeof(TppRouteNodeEventHelicopter));
+            GameServiceModule.RegisterRouteNodeEventTypeOverride(new StrCode32("DropPoint"), typeof(TppRouteNodeEventHelicopter));
             
             // Volgin ride
             GameServiceModule.RegisterRouteEdgeEventTypeOverride(new StrCode32("chase"), typeof(TppRouteEdgeEventChase));

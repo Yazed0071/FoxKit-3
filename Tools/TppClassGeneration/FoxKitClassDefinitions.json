@@ -658,7 +658,7 @@
         "container": "StaticArray",
         "enum": "TppRouteEdgeEventHelicopter_DoorState",
         "exportFlag": "RW",
-        "name": "unknownAction",
+        "name": "landingGearState",
         "offset": 96,
         "ptrType": null,
         "size": 4,
@@ -726,6 +726,116 @@
         "exportFlag": "RW",
         "name": "defaultDoorSide",
         "offset": 120,
+        "ptrType": null,
+        "size": 4,
+        "type": "uint32"
+      }
+    ],
+    "version": 0
+  },
+  {
+    "category": null,
+    "functions": [],
+    "id": 0,
+    "name": "TppRouteNodeEventHelicopter",
+    "namespace": "TppGameKit",
+    "parent": "GsRouteDataNodeEvent",
+    "properties": [
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": "TppRouteEdgeEventHelicopter_DoorState",
+        "exportFlag": "RW",
+        "name": "leftDoorState",
+        "offset": 112,
+        "ptrType": null,
+        "size": 4,
+        "type": "uint32"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": "TppRouteEdgeEventHelicopter_DoorState",
+        "exportFlag": "RW",
+        "name": "rightDoorState",
+        "offset": 116,
+        "ptrType": null,
+        "size": 4,
+        "type": "uint32"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": "TppRouteEdgeEventHelicopter_DoorState",
+        "exportFlag": "RW",
+        "name": "landingGearState",
+        "offset": 120,
+        "ptrType": null,
+        "size": 4,
+        "type": "uint32"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": "TppRouteEdgeEventHelicopter_DirectionType",
+        "exportFlag": "RW",
+        "name": "directionType",
+        "offset": 124,
+        "ptrType": null,
+        "size": 4,
+        "type": "uint32"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "direction",
+        "offset": 128,
+        "ptrType": null,
+        "size": 4,
+        "type": "int32"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "setTargetSpeed",
+        "offset": 132,
+        "ptrType": null,
+        "size": 1,
+        "type": "bool"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "targetSpeed",
+        "offset": 136,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": null,
+        "exportFlag": "RW",
+        "name": "changeTime",
+        "offset": 140,
+        "ptrType": null,
+        "size": 4,
+        "type": "float"
+      },
+      {
+        "arraySize": 1,
+        "container": "StaticArray",
+        "enum": "TppRouteEdgeEventHelicopter_DoorSide",
+        "exportFlag": "RW",
+        "name": "defaultDoorSide",
+        "offset": 144,
         "ptrType": null,
         "size": 4,
         "type": "uint32"
