@@ -79,7 +79,14 @@ namespace Fox
                     Debug.LogWarning($"StringIdMap: load entry {(hash, value)} already provided.");
         }
 
-        public bool Resolve(StrCode hash, out string value) => Map.TryGetValue(hash, out value);
+        public bool Resolve(StrCode hash, out string value)
+        {
+            bool status = Map.TryGetValue(hash, out value);
+            if (!status)
+                value = hash.ToString();
+            
+            return status;
+        }
 
         public bool Add(string value)
         {
@@ -199,7 +206,14 @@ namespace Fox
                     Debug.LogWarning($"StringId32Map: load entry {(hash, value)} already provided.");
         }
 
-        public bool Resolve(StrCode32 hash, out string value) => Map.TryGetValue(hash, out value);
+        public bool Resolve(StrCode32 hash, out string value)
+        {
+            bool status = Map.TryGetValue(hash, out value);
+            if (!status)
+                value = hash.ToString();
+            
+            return status;
+        }
 
         public bool Add(string value)
         {

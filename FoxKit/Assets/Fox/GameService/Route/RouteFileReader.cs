@@ -58,7 +58,7 @@ namespace Fox.GameService
                 List<GsRouteData> routeDatas = new List<GsRouteData>(routeCount);
                 for (int i = 0; i < routeCount; i++)
                 {
-                    string routeId = GameServiceModule.RouteIdMap.Resolve(routeIds[i], out string routeIdString) ? routeIdString : routeIds[i].ToString();
+                    GameServiceModule.RouteIdMap.Resolve(routeIds[i], out string routeId);
 
                     RouteFile.RouteDef* routeDef = routeDefs + i;
 
@@ -113,7 +113,7 @@ namespace Fox.GameService
 
                             Debug.Assert(eventDef->BodySectionType == RouteBodySectionType.Head);
                             
-                            string eventId = GameServiceModule.EventIdMap.Resolve(eventDef->Id, out string eventIdString) ? eventIdString : eventDef->Id.ToString();
+                            GameServiceModule.EventIdMap.Resolve(eventDef->Id, out string eventId);
                             GameObject eventGameObject = new GameObject();
                             GsRouteDataEvent @event = null;
 
