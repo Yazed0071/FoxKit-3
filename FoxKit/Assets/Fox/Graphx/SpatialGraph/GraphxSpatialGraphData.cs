@@ -29,36 +29,6 @@ namespace Fox.Graphx
             return GeometryUtility.TestPlanesAABB(planes, GetWorldBounds());
         }
 
-        private static readonly Vector3 NodeGizmoScale = Vector3.one * 0.25f;
-
-        private Vector3[] GizmoVertexCache = null;
-
-        private void DrawGizmos(bool isSelected)
-        {
-            if (nodes.Count == 0 || !IsVisibleInFrustum(Camera.current))
-                return;
-
-            Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.color = isSelected ? EditorColors.GenericSelectedColor : EditorColors.GenericUnselectedColor;
-
-            if (GizmoVertexCache == null || GizmoVertexCache.Length < nodes.Count)
-                GizmoVertexCache = new Vector3[nodes.Count];
-            
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                Vector3 vertex = nodes[i].transform.localPosition;
-                GizmoVertexCache[i] = vertex;
-                
-                Gizmos.DrawWireCube(vertex, NodeGizmoScale);
-            }
-
-            Gizmos.DrawLineStrip(GizmoVertexCache[..nodes.Count], IsLoop());
-        }
-
-        public void OnDrawGizmos() => DrawGizmos(false);
-
-        public void OnDrawGizmosSelected() => DrawGizmos(true);
-
         public virtual Type GetNodeType() => typeof(GraphxSpatialGraphDataNode);
         public virtual Type GetEdgeType() => typeof(GraphxSpatialGraphDataEdge);
         public virtual bool IsLoop() => true;

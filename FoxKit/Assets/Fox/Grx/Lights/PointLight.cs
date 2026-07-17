@@ -1,5 +1,4 @@
 using Fox.Core.Utils;
-using UnityEngine;
 using Fox.Core;
 
 namespace Fox.Grx
@@ -50,29 +49,12 @@ namespace Fox.Grx
 
             reachPoint = Fox.Math.FoxToUnityVector3(reachPoint);
         }
+        
         public override void OnSerializeEntity(EntityExportContext context)
         {
             base.OnSerializeEntity(context);
 
             context.OverrideProperty(nameof(reachPoint), Fox.Math.UnityToFoxVector3(reachPoint));
         }
-
-        private PointLightGizmo Gizmo = new PointLightGizmo();
-
-        private void DrawGizmos(bool isSelected)
-        {
-            Gizmo.Transform = this.transform;
-            Gizmo.Label = isSelected ? this.name : null;
-            Gizmo.OuterRange = outerRange;
-
-            if (isSelected)
-                Gizmo.OnDrawGizmosSelected();
-            else
-                Gizmo.OnDrawGizmos();
-        }
-
-        private void OnDrawGizmos() => DrawGizmos(false);
-
-        private void OnDrawGizmosSelected() => DrawGizmos(true);
     }
 }
