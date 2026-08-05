@@ -1815,10 +1815,16 @@ namespace Fox
 	
     public enum GsRouteDataEventAimPoint_TargetType : byte
     {
-		[Description("HEAD")]
-        HEAD = 0,
-		[Description("BREAST")]
-        BREAST = 1,
+		[Description("NO_TARGET")]
+        NO_TARGET = 0,
+		[Description("STATIC_POINT")]
+        STATIC_POINT = 1,
+		[Description("CHARACTER")]
+        CHARACTER = 2,
+		[Description("ROUTE_AS_SIGHT_MOVE_PATH")]
+        ROUTE_AS_SIGHT_MOVE_PATH = 3,
+		[Description("ROUTE_AS_OBJECT")]
+        ROUTE_AS_OBJECT = 4,
     }
 	
 	

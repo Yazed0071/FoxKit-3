@@ -5,12 +5,24 @@
 		"underlying_type": "byte",
 		"values": [
 			{
-				"name": "HEAD",
+				"name": "NO_TARGET",
 				"value": 0
 			},
 			{
-				"name": "BREAST",
+				"name": "STATIC_POINT",
 				"value": 1
+			},
+			{
+				"name": "CHARACTER",
+				"value": 2
+			},
+			{
+				"name": "ROUTE_AS_SIGHT_MOVE_PATH",
+				"value": 3
+			},
+			{
+				"name": "ROUTE_AS_OBJECT",
+				"value": 4
 			}
 		]
 	},
