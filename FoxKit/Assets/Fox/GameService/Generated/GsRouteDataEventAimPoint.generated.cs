@@ -17,14 +17,7 @@ namespace Fox.GameService
 	{
 		// Properties
 		[field: UnityEngine.SerializeField]
-		public byte type { get; set; }
-		
-		public string typeName { get => typeName_Get(); set => typeName_Set(value); }
-		private partial string typeName_Get();
-		private partial void typeName_Set(string value);
-		
-		[field: UnityEngine.SerializeField]
-		public byte infoType { get; set; }
+		public GsRouteDataEventAimPoint_TargetType type { get; set; }
 		
 		[field: UnityEngine.SerializeField]
 		public UnityEngine.Vector3 position { get; set; }
@@ -33,11 +26,7 @@ namespace Fox.GameService
 		public string[] targetIds { get; private set; } = new string[4];
 		
 		[field: UnityEngine.SerializeField]
-		public byte bodySection { get; set; }
-		
-		public string bodySectionName { get => bodySectionName_Get(); set => bodySectionName_Set(value); }
-		private partial string bodySectionName_Get();
-		private partial void bodySectionName_Set(string value);
+		public GsRouteDataEventAimPoint_BodySection bodySection { get; set; }
 		
 		// ClassInfos
 		public static new bool ClassInfoInitialized = false;
@@ -57,13 +46,10 @@ namespace Fox.GameService
 		{
 			if (Fox.Core.DataElement.ClassInfoInitialized)
 				classInfo = new Fox.Core.EntityInfo("GsRouteDataEventAimPoint", typeof(GsRouteDataEventAimPoint), Fox.Core.DataElement.ClassInfo, 0, null, 2);
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("type", Fox.Core.PropertyInfo.PropertyType.UInt8, 56, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("typeName", Fox.Core.PropertyInfo.PropertyType.String, 0, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Accessor));
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("infoType", Fox.Core.PropertyInfo.PropertyType.UInt8, 57, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
+			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("type", Fox.Core.PropertyInfo.PropertyType.UInt8, 56, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, null, typeof(GsRouteDataEventAimPoint_TargetType), Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
 			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("position", Fox.Core.PropertyInfo.PropertyType.Vector3, 64, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
 			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("targetIds", Fox.Core.PropertyInfo.PropertyType.String, 80, 4, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("bodySection", Fox.Core.PropertyInfo.PropertyType.UInt8, 112, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
-			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("bodySectionName", Fox.Core.PropertyInfo.PropertyType.String, 0, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, Fox.Core.PropertyInfo.PropertyExport.EditorAndGame, null, null, Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Accessor));
+			classInfo.AddStaticProperty(new Fox.Core.PropertyInfo("bodySection", Fox.Core.PropertyInfo.PropertyType.UInt8, 112, 1, Fox.Core.PropertyInfo.ContainerType.StaticArray, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, Fox.Core.PropertyInfo.PropertyExport.EditorOnly, null, typeof(GsRouteDataEventAimPoint_BodySection), Fox.Core.PropertyInfo.PropertyStorage.Instance, Fox.Core.PropertyInfo.BackingType.Field));
 
 			ClassInfoInitialized = true;
 		}
@@ -74,18 +60,12 @@ namespace Fox.GameService
 			{
 				case "type":
 					return new Fox.Core.Value(type);
-				case "typeName":
-					return new Fox.Core.Value(typeName);
-				case "infoType":
-					return new Fox.Core.Value(infoType);
 				case "position":
 					return new Fox.Core.Value(position);
 				case "targetIds":
 					return new Fox.Core.Value(targetIds);
 				case "bodySection":
 					return new Fox.Core.Value(bodySection);
-				case "bodySectionName":
-					return new Fox.Core.Value(bodySectionName);
 				default:
 					return base.GetProperty(propertyName);
 			}
@@ -116,22 +96,13 @@ namespace Fox.GameService
 			switch (propertyName)
 			{
 				case "type":
-					this.type = value.GetValueAsUInt8();
-					return;
-				case "typeName":
-					this.typeName = value.GetValueAsString();
-					return;
-				case "infoType":
-					this.infoType = value.GetValueAsUInt8();
+					this.type = (GsRouteDataEventAimPoint_TargetType)value.GetValueAsUInt8();
 					return;
 				case "position":
 					this.position = value.GetValueAsVector3();
 					return;
 				case "bodySection":
-					this.bodySection = value.GetValueAsUInt8();
-					return;
-				case "bodySectionName":
-					this.bodySectionName = value.GetValueAsString();
+					this.bodySection = (GsRouteDataEventAimPoint_BodySection)value.GetValueAsUInt8();
 					return;
 				default:
 					base.SetProperty(propertyName, value);

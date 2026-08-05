@@ -172,32 +172,10 @@
       {
         "arraySize": 1,
         "container": "StaticArray",
-        "enum": null,
+        "enum": "GsRouteDataEventAimPoint_TargetType",
         "exportFlag": "rw",
         "name": "type",
         "offset": 56,
-        "ptrType": null,
-        "size": 1,
-        "type": "uint8"
-      },
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
-        "exportFlag": "RW",
-        "name": "typeName",
-        "offset": 0,
-        "ptrType": null,
-        "size": 8,
-        "type": "String"
-      },
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
-        "exportFlag": "rw",
-        "name": "infoType",
-        "offset": 57,
         "ptrType": null,
         "size": 1,
         "type": "uint8"
@@ -227,24 +205,13 @@
       {
         "arraySize": 1,
         "container": "StaticArray",
-        "enum": null,
+        "enum": "GsRouteDataEventAimPoint_BodySection",
         "exportFlag": "rw",
         "name": "bodySection",
         "offset": 112,
         "ptrType": null,
         "size": 1,
         "type": "uint8"
-      },
-      {
-        "arraySize": 1,
-        "container": "StaticArray",
-        "enum": null,
-        "exportFlag": "RW",
-        "name": "bodySectionName",
-        "offset": 0,
-        "ptrType": null,
-        "size": 8,
-        "type": "String"
       }
     ],
     "version": 2
