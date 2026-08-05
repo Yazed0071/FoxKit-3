@@ -1813,6 +1813,24 @@ namespace Fox
     }
 	
 	
+    public enum GsRouteDataEventAimPoint_TargetType : byte
+    {
+		[Description("HEAD")]
+        HEAD = 0,
+		[Description("BREAST")]
+        BREAST = 1,
+    }
+	
+	
+    public enum GsRouteDataEventAimPoint_BodySection : byte
+    {
+		[Description("HEAD")]
+        HEAD = 0,
+		[Description("BREAST")]
+        BREAST = 1,
+    }
+	
+	
     public enum TppRouteEdgeEventHelicopter_DoorState : uint
     {
 		[Description("DOOR_STATE_DEFAULT")]

@@ -80,7 +80,6 @@ def generate_classes ():
         root_namespace = get_root_namespace(definitions[class_name].namespace)
         trimmed_namespace = get_namespace_without_prefix(definitions[class_name].namespace)
         output_path = make_output_path(definitions[class_name].name, root_namespace, trimmed_namespace)
-        Path(f'../{root_namespace}/{trimmed_namespace}/Generated').mkdir(parents=True, exist_ok=True)
 
         output_file = open(output_path,"w")
         output_file.write(result)
@@ -102,7 +101,7 @@ def generate_enums ():
     result = template.render(enums = definitions)
         
     # Output generated file
-    output_file = open(f'../Enums.generated.cs', "w")
+    output_file = open(f'../../FoxKit/Assets/Fox/Kernel/Generated/Enums.generated.cs', "w") 
     output_file.write(result)
     output_file.close()
 
