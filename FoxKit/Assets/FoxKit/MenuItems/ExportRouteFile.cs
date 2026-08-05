@@ -41,10 +41,9 @@ namespace FoxKit.MenuItems
                 return;
             }
 
-            using BinaryWriter writer = new BinaryWriter(System.IO.File.Open(outputPath, FileMode.Create), System.Text.Encoding.Default);
             RouteFileWriter frtWriter = new RouteFileWriter();
-
-            frtWriter.Write(writer, scene);
+            byte[] data = frtWriter.Write(scene);
+            System.IO.File.WriteAllBytes(outputPath, data);
         }
     }
 }

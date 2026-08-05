@@ -60,7 +60,7 @@ namespace Fox.EdGameService
 
             VisualElement eventTypeSection = new VisualElement();
             container.Add(eventTypeSection);
-            int builtCount = -1;
+            // int builtCount = -1;
             // int filledCount = Target.GetDirectionCount();
 
             // container.schedule.Execute(() =>
